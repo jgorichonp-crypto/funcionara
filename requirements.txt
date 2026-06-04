@@ -1,0 +1,17 @@
+# Core dependencies
+pydantic==2.9.2
+pydantic-settings==2.6.1
+
+# Async HTTP client
+aiohttp==3.11.10
+
+# Environment variables
+python-dotenv==1.0.1
+
+# Optional: For production enhancements
+google-genai>=0.1.1  # Integración real con Google Gemini API (Texto e Imágenes)
+# sentry-sdk==2.19.2  # Para monitoreo de errores en producción
+
+# Backend Server dependencies
+fastapi==0.115.0
+uvicorn==0.31.0
