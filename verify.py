@@ -5,6 +5,13 @@ Valida que todas las dependencias y módulos estén correctamente instalados.
 import sys
 import importlib
 
+# Configurar codificación UTF-8 en consola de Windows
+if sys.platform.startswith('win'):
+    try:
+        sys.stdout.reconfigure(encoding='utf-8')
+    except Exception:
+        pass
+
 
 def check_python_version():
     """Verifica que la versión de Python sea 3.11+"""
