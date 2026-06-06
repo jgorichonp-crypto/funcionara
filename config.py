@@ -17,6 +17,11 @@ class Settings(BaseSettings):
     # Dropi Integration
     dropi_api_key: str = "your-dropi-api-key-here"
     dropi_product_id: int = 123456
+    dropi_email: Optional[str] = None
+    dropi_password: Optional[str] = None
+    dropi_product_name: str = "Producto de Tienda"
+    dropi_product_price: float = 0.0
+    dropi_supplier_id: Optional[int] = None
     
     # Deployment
     vercel_token: str = "vercel-test-token-placeholder"
