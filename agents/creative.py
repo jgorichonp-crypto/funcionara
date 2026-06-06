@@ -33,9 +33,9 @@ class MarketingAngles(BaseModel):
 def _is_api_key_valid() -> bool:
     """
     Verifica si la clave de API de Gemini es válida.
-    Retorna False para forzar la simulación durante el desarrollo y no gastar tokens.
     """
-    return False
+    api_key = settings.gemini_api_key
+    return bool(api_key and "placeholder" not in api_key.lower())
 
 
 async def _generate_marketing_copy(product_name: str) -> dict:
