@@ -23,6 +23,16 @@ class Settings(BaseSettings):
     dropi_product_price: float = 0.0
     dropi_supplier_id: Optional[int] = None
     
+    # WhatsApp Integration
+    whatsapp_provider: str = "mock"  # "mock", "evolution", o "twilio"
+    whatsapp_api_url: str = "https://api.whatsapp-gateway.com"
+    whatsapp_api_token: str = "whatsapp-token-placeholder"
+    whatsapp_instance: str = "my-instance"
+    whatsapp_phone_number_id: str = "twilio-phone-number-id-placeholder"
+    
+    # Database Integration (PostgreSQL / Supabase)
+    database_url: Optional[str] = None
+    
     # Deployment
     vercel_token: str = "vercel-test-token-placeholder"
     vercel_team_id: Optional[str] = None

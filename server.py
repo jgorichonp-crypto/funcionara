@@ -9,7 +9,7 @@ import json
 import time
 import unicodedata
 from typing import Optional
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, BackgroundTasks, Request
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse, JSONResponse
 from pydantic import BaseModel
@@ -187,7 +187,7 @@ async def serve_landing():
 
 
 @app.post("/api/order")
-def create_order(order: OrderRequest):
+def create_order(order: OrderRequest, background_tasks: BackgroundTasks):
     """
     Recibe los datos del cliente, inicia sesión en Dropi de forma automática y crea
     la orden usando la API de usuario. Se ejecuta síncronamente en el pool de hilos de FastAPI.
@@ -207,10 +207,36 @@ def create_order(order: OrderRequest):
             f"  - Fono: {order.phone}\n"
             f"  - Destino: {order.address}, {order.city}"
         )
+        dropi_order_id = "SIM-COD-98274"
+        
+        # Persistir en la BD local
+        from database import save_order
+        save_order(
+            dropi_order_id=dropi_order_id,
+            client_name=order.name,
+            phone=order.phone,
+            address=order.address,
+            city=order.city,
+            product_name=settings.dropi_product_name or "Producto Simulado",
+            price=settings.dropi_product_price or 19990.0
+        )
+        
+        # Enviar confirmación por WhatsApp en segundo plano
+        from agents.crm import send_order_confirmation_request
+        background_tasks.add_task(send_order_confirmation_request, {
+            "client_name": order.name,
+            "phone": order.phone,
+            "product_name": settings.dropi_product_name or "Producto Simulado",
+            "price": settings.dropi_product_price or 19990.0,
+            "address": order.address,
+            "city": order.city,
+            "dropi_order_id": dropi_order_id
+        })
+        
         return {
             "status": "success",
             "message": "Pedido simulado registrado exitosamente en Dropi Chile (Modo Desarrollo)",
-            "order_id": "SIM-COD-98274"
+            "order_id": dropi_order_id
         }
         
     logger.info(f"🚀 Iniciando envío de orden real a Dropi Chile (Producto ID: {settings.dropi_product_id})...")
@@ -328,9 +354,34 @@ def create_order(order: OrderRequest):
                 dropi_order_id = objects.get("id")
             if not dropi_order_id and isinstance(response_json, dict):
                 dropi_order_id = response_json.get("order_id") or response_json.get("id")
-            dropi_order_id = dropi_order_id or "OK"
+            dropi_order_id = str(dropi_order_id or "OK")
             
             logger.info(f"✅ Pedido creado en Dropi con éxito. ID: {dropi_order_id}")
+            
+            # Persistir en la BD local
+            from database import save_order
+            save_order(
+                dropi_order_id=dropi_order_id,
+                client_name=order.name,
+                phone=order.phone,
+                address=order.address,
+                city=order.city,
+                product_name=product_name,
+                price=product_price
+            )
+            
+            # Enviar confirmación por WhatsApp en segundo plano
+            from agents.crm import send_order_confirmation_request
+            background_tasks.add_task(send_order_confirmation_request, {
+                "client_name": order.name,
+                "phone": order.phone,
+                "product_name": product_name,
+                "price": product_price,
+                "address": order.address,
+                "city": order.city,
+                "dropi_order_id": dropi_order_id
+            })
+            
             return {
                 "status": "success",
                 "message": "Pedido registrado exitosamente en Dropi Chile.",
@@ -353,6 +404,92 @@ def create_order(order: OrderRequest):
             status_code=500,
             detail=f"Error de conexión con el proveedor Dropi: {str(e)}"
         )
+
+
+@app.on_event("startup")
+def startup_event():
+    """Inicializa la base de datos al arrancar el servidor."""
+    from database import init_db
+    init_db()
+
+
+@app.post("/api/whatsapp/webhook")
+async def whatsapp_webhook(request: Request, background_tasks: BackgroundTasks):
+    """
+    Endpoint webhook para escuchar respuestas de WhatsApp.
+    Soporta Evolution API (JSON) y Twilio (Form data).
+    """
+    content_type = request.headers.get("content-type", "")
+    
+    if "application/json" in content_type:
+        payload = await request.json()
+        logger.info(f"📥 Webhook WhatsApp JSON recibido: {payload}")
+        
+        # Evolution API (event: messages.upsert)
+        event = payload.get("event")
+        if event == "messages.upsert":
+            data = payload.get("data", {})
+            key = data.get("key", {})
+            from_me = key.get("fromMe", False)
+            if from_me:
+                return {"status": "ignored", "reason": "sent_by_me"}
+                
+            remote_jid = key.get("remoteJid", "")
+            phone = remote_jid.split("@")[0] if "@" in remote_jid else remote_jid
+            
+            message_data = data.get("message", {})
+            reply_text = ""
+            if "conversation" in message_data:
+                reply_text = message_data["conversation"]
+            elif "extendedTextMessage" in message_data:
+                reply_text = message_data["extendedTextMessage"].get("text", "")
+            elif "buttonsResponseMessage" in message_data:
+                reply_text = message_data["buttonsResponseMessage"].get("selectedButtonId", "") or message_data["buttonsResponseMessage"].get("selectedDisplayText", "")
+                
+            if phone and reply_text:
+                from agents.crm import process_incoming_reply
+                background_tasks.add_task(process_incoming_reply, phone, reply_text)
+                return {"status": "processing"}
+                
+    elif "application/x-www-form-urlencoded" in content_type:
+        form_data = await request.form()
+        logger.info(f"📥 Webhook WhatsApp Form recibido: {dict(form_data)}")
+        
+        # Twilio WhatsApp Webhook
+        from_number = form_data.get("From", "")  # Ej: whatsapp:+56912345678
+        body = form_data.get("Body", "")
+        
+        if from_number and body:
+            phone = from_number.replace("whatsapp:", "").replace("+", "").strip()
+            from agents.crm import process_incoming_reply
+            background_tasks.add_task(process_incoming_reply, phone, body)
+            return {"status": "processing"}
+            
+    return {"status": "ignored"}
+
+
+class TestReplyRequest(BaseModel):
+    phone: str
+    text: str
+
+
+@app.post("/api/test/whatsapp-reply")
+async def test_whatsapp_reply(reply: TestReplyRequest, background_tasks: BackgroundTasks):
+    """Endpoint de simulación para emular la respuesta de un cliente en WhatsApp."""
+    logger.info(f"🧪 [SIMULACIÓN WEBHOOK] Recibida respuesta test para +{reply.phone}: '{reply.text}'")
+    from agents.crm import process_incoming_reply
+    background_tasks.add_task(process_incoming_reply, reply.phone, reply.text)
+    return {
+        "status": "success",
+        "message": f"Simulación de respuesta en cola para +{reply.phone}"
+    }
+
+
+@app.get("/api/admin/orders")
+def admin_get_orders():
+    """Endpoint auxiliar para ver la lista de órdenes registradas localmente."""
+    from database import get_all_orders
+    return {"orders": get_all_orders()}
 
 
 if __name__ == "__main__":

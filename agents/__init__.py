@@ -12,6 +12,7 @@ from .scout import run_scout_agent
 from .creative import run_creative_agent
 from .devops import run_devops_agent
 from .media_buyer import run_media_buyer_agent
+from .crm import send_order_confirmation_request, process_incoming_reply
 
 # Módulos de validación FASE 2
 try:
@@ -28,6 +29,8 @@ __all__ = [
     "run_creative_agent",
     "run_devops_agent",
     "run_media_buyer_agent",
+    "send_order_confirmation_request",
+    "process_incoming_reply",
     # FASE 2
     "analyze_market_saturation",
     "should_reject_product_by_saturation",
