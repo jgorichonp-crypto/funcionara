@@ -397,7 +397,11 @@ def _generate_html_template(state: ProductState) -> str:
                 name: inputs[0].value,
                 phone: inputs[1].value,
                 address: inputs[2].value,
-                city: inputs[3].value
+                city: inputs[3].value,
+                product_id: {settings.dropi_product_id},
+                product_name: "{state.product_name}",
+                product_price: {state.suggested_price},
+                supplier_id: {settings.dropi_supplier_id or 'null'}
             }};
 
             try {{

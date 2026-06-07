@@ -34,6 +34,10 @@ class OrderRequest(BaseModel):
     phone: str
     address: str
     city: str
+    product_id: Optional[int] = None
+    product_name: Optional[str] = None
+    product_price: Optional[float] = None
+    supplier_id: Optional[int] = None
 
 
 # Sesión de usuario persistida en memoria para Dropi Chile
@@ -305,9 +309,10 @@ def create_order(order: OrderRequest, background_tasks: BackgroundTasks):
     logger.info(f"🚀 Iniciando envío de orden real a Dropi Chile (Producto ID: {settings.dropi_product_id})...")
     
     # 2. Configurar fallbacks para detalles de producto
-    product_name = settings.dropi_product_name or "Producto de Tienda"
-    product_price = settings.dropi_product_price or 19990.0
-    supplier_id = settings.dropi_supplier_id or 2924
+    p_id = order.product_id if order.product_id else settings.dropi_product_id
+    product_name = order.product_name if order.product_name else (settings.dropi_product_name or "Producto de Tienda")
+    product_price = order.product_price if order.product_price else (settings.dropi_product_price or 19990.0)
+    supplier_id = order.supplier_id if order.supplier_id else (settings.dropi_supplier_id or 2924)
     
     # Intentar obtener información de producto del catálogo dinámicamente si es posible
     headers = {
@@ -317,7 +322,7 @@ def create_order(order: OrderRequest, background_tasks: BackgroundTasks):
         "Accept": "application/json"
     }
     
-    product_url = f"https://api.dropi.cl/api/products/{settings.dropi_product_id}"
+    product_url = f"https://api.dropi.cl/api/products/{p_id}"
     logger.info(f"🔍 Intentando obtener detalles del producto desde: {product_url}")
     
     try:
@@ -366,7 +371,7 @@ def create_order(order: OrderRequest, background_tasks: BackgroundTasks):
         "rate_type": "CON RECAUDO",
         "products": [
             {
-                "id": int(settings.dropi_product_id),
+                "id": int(p_id),
                 "name": product_name,
                 "quantity": 1,
                 "price": product_price
