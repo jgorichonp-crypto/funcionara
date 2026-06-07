@@ -54,58 +54,121 @@ def normalize_text(text: str) -> str:
 
 def get_geographic_details(input_str: str):
     """
-    Parsea la entrada 'Región / Comuna' del formulario de la landing page.
+    Parsea la entrada 'Región / Comuna' o simplemente 'Comuna' del formulario.
     Retorna (state, city) compatibles con Dropi Chile.
     """
+    # Soporta comas además de barras diagonales como separador
+    input_str_clean = input_str.replace(",", "/")
+    parts = [p.strip() for p in input_str_clean.split("/") if p.strip()]
+    
     state_val = "Metropolitana de Santiago"
     city_val = "SANTIAGO"
-    
-    parts = [p.strip() for p in input_str.split("/") if p.strip()]
     
     if len(parts) >= 2:
         state_raw = normalize_text(parts[0])
         city_raw = normalize_text(parts[1])
+    else:
+        # Si solo ingresó una parte (comuna), tratamos de inferir la región automáticamente
+        city_raw = normalize_text(parts[0]) if parts else "SANTIAGO"
+        state_raw = ""
         
-        # Mapeo simple de regiones comunes de Chile
-        if "METROPOLITANA" in state_raw or "RM" in state_raw or "SANTIAGO" in state_raw:
-            state_val = "Metropolitana de Santiago"
-        elif "VALPARAISO" in state_raw:
-            state_val = "Valparaíso"
-        elif "BIO" in state_raw:
-            state_val = "Bío-Bío"
-        elif "OHIGGINS" in state_raw or "BERNARDO" in state_raw:
-            state_val = "Libertador General Bernardo O'Higgins"
-        elif "MAULE" in state_raw:
-            state_val = "Maule"
-        elif "ARAUCANIA" in state_raw:
-            state_val = "La Araucanía"
-        elif "LOS LAGOS" in state_raw:
-            state_val = "Los Lagos"
-        elif "COQUIMBO" in state_raw:
-            state_val = "Coquimbo"
-        elif "ANTOFAGASTA" in state_raw:
-            state_val = "Antofagasta"
-        elif "TARAPACA" in state_raw:
-            state_val = "Tarapacá"
-        elif "ATACAMA" in state_raw:
-            state_val = "Atacama"
-        elif "LOS RIOS" in state_raw:
-            state_val = "Los Ríos"
-        elif "ARICA" in state_raw:
-            state_val = "Arica y Parinacota"
-        elif "NUBLE" in state_raw:
-            state_val = "Ñuble"
-        elif "AYSEN" in state_raw or "IBANEZ" in state_raw:
-            state_val = "Aysén del General Carlos Ibáñez del Campo"
-        elif "MAGALLANES" in state_raw:
-            state_val = "Magallanes y de la Antártica Chilena"
+        # Diccionario de inferencia de región para comunas chilenas fuera de Santiago
+        commune_to_region = {
+            "VINA DEL MAR": "Valparaíso",
+            "VALPARAISO": "Valparaíso",
+            "QUILPUE": "Valparaíso",
+            "VILLA ALEMANA": "Valparaíso",
+            "CONCON": "Valparaíso",
+            "SAN ANTONIO": "Valparaíso",
+            "QUILLOTA": "Valparaíso",
+            "LOS ANDES": "Valparaíso",
+            "SAN FELIPE": "Valparaíso",
+            "CONCEPCION": "Bío-Bío",
+            "TALCAHUANO": "Bío-Bío",
+            "SAN PEDRO DE LA PAZ": "Bío-Bío",
+            "CHIGUAYANTE": "Bío-Bío",
+            "CORONEL": "Bío-Bío",
+            "LOTA": "Bío-Bío",
+            "LOS ANGELES": "Bío-Bío",
+            "TEMUCO": "La Araucanía",
+            "PADRE LAS CASAS": "La Araucanía",
+            "ANGOL": "La Araucanía",
+            "RANCAGUA": "Libertador General Bernardo O'Higgins",
+            "MACHALI": "Libertador General Bernardo O'Higgins",
+            "SAN FERNANDO": "Libertador General Bernardo O'Higgins",
+            "RENGO": "Libertador General Bernardo O'Higgins",
+            "TALCA": "Maule",
+            "CURICO": "Maule",
+            "LINARES": "Maule",
+            "COQUIMBO": "Coquimbo",
+            "LA SERENA": "Coquimbo",
+            "OVALLE": "Coquimbo",
+            "ANTOFAGASTA": "Antofagasta",
+            "CALAMA": "Antofagasta",
+            "IQUIQUE": "Tarapacá",
+            "ALTO HOSPICIO": "Tarapacá",
+            "ARICA": "Arica y Parinacota",
+            "COPIAPO": "Atacama",
+            "PUERTO MONTT": "Los Lagos",
+            "OSORNO": "Los Lagos",
+            "PUERTO VARAS": "Los Lagos",
+            "VALDIVIA": "Los Ríos",
+            "CHILLAN": "Ñuble",
+            "PUNTA ARENAS": "Magallanes y de la Antártica Chilena",
+            "COYHAIQUE": "Aysén del General Carlos Ibáñez del Campo"
+        }
+        
+        # Buscar coincidencia exacta o parcial
+        found_state = None
+        for commune, region in commune_to_region.items():
+            if commune in city_raw or city_raw in commune:
+                found_state = region
+                break
+                
+        if found_state:
+            state_val = found_state
+            city_val = city_raw
+            return state_val, city_val
         else:
-            state_val = parts[0]
-            
-        city_val = city_raw
-    elif len(parts) == 1:
-        city_val = normalize_text(parts[0])
+            state_raw = "METROPOLITANA"
+
+    # Mapeo estándar de regiones
+    if "METROPOLITANA" in state_raw or "RM" in state_raw or "SANTIAGO" in state_raw:
+        state_val = "Metropolitana de Santiago"
+    elif "VALPARAISO" in state_raw:
+        state_val = "Valparaíso"
+    elif "BIO" in state_raw:
+        state_val = "Bío-Bío"
+    elif "OHIGGINS" in state_raw or "BERNARDO" in state_raw:
+        state_val = "Libertador General Bernardo O'Higgins"
+    elif "MAULE" in state_raw:
+        state_val = "Maule"
+    elif "ARAUCANIA" in state_raw:
+        state_val = "La Araucanía"
+    elif "LOS LAGOS" in state_raw:
+        state_val = "Los Lagos"
+    elif "COQUIMBO" in state_raw:
+        state_val = "Coquimbo"
+    elif "ANTOFAGASTA" in state_raw:
+        state_val = "Antofagasta"
+    elif "TARAPACA" in state_raw:
+        state_val = "Tarapacá"
+    elif "ATACAMA" in state_raw:
+        state_val = "Atacama"
+    elif "LOS RIOS" in state_raw:
+        state_val = "Los Ríos"
+    elif "ARICA" in state_raw:
+        state_val = "Arica y Parinacota"
+    elif "NUBLE" in state_raw:
+        state_val = "Ñuble"
+    elif "AYSEN" in state_raw or "IBANEZ" in state_raw:
+        state_val = "Aysén del General Carlos Ibáñez del Campo"
+    elif "MAGALLANES" in state_raw:
+        state_val = "Magallanes y de la Antártica Chilena"
+    else:
+        state_val = parts[0] if parts else "Metropolitana de Santiago"
         
+    city_val = city_raw
     return state_val, city_val
 
 
