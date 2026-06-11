@@ -117,7 +117,19 @@ async def scrape_supplier_profile(supplier_url: str) -> Dict:
     
     # Extraer ID del supplier de la URL (simulado)
     # En producción: extraer del HTML de la página
-    supplier_id = supplier_url.split("/item/")[1].split(".html")[0] if "/item/" in supplier_url else "unknown"
+    import random
+    
+    supplier_id = "unknown"
+    if "/item/" in supplier_url:
+        try:
+            parts = supplier_url.split("/item/")[1].split(".html")[0].split("?")[0]
+            supplier_id = "".join(c for c in parts if c.isdigit())
+        except Exception:
+            supplier_id = "unknown"
+            
+    if not supplier_id or not supplier_id.isdigit():
+        # Generar un ID aleatorio numérico para evitar errores en simulación
+        supplier_id = str(random.randint(1000000000, 9999999999))
     
     # Simulación de datos del proveedor
     # En producción: scraping real de AliExpress

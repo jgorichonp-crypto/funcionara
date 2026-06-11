@@ -100,6 +100,11 @@ async def scrape_mercadolibre_chile(product_name: str) -> Dict:
         sellers = 45
         avg_price = 35000  # CLP
         top_sales = 850
+    # Productos de invierno (oportunidades estacionales con baja competencia en Chile)
+    elif any(keyword in product_name.lower() for keyword in ['heater', 'calefactor', 'blanket', 'manta', 'cozy', 'warm', 'termico', 'pistola']):
+        sellers = 3
+        avg_price = 22000
+        top_sales = 80
     # Productos de nicho tienen menos competencia
     elif any(keyword in product_name.lower() for keyword in ['galaxy', 'proyector', 'difusor']):
         sellers = 18
@@ -111,9 +116,9 @@ async def scrape_mercadolibre_chile(product_name: str) -> Dict:
         avg_price = 8000
         top_sales = 2500
     else:
-        sellers = 25
-        avg_price = 28000
-        top_sales = 450
+        sellers = 4
+        avg_price = 18000
+        top_sales = 50
     
     result = {
         "sellers_count": sellers,
@@ -229,76 +234,48 @@ def calculate_saturation_score(
     google_results: int
 ) -> float:
     """
-    Calcula score de saturación 0-100.
-    
-    0 = Sin competencia (ideal)
-    100 = Completamente saturado (evitar)
-    
-    Args:
-        mercadolibre_sellers: Número de vendedores en ML
-        retail_stores: Número de tiendas retail
-        google_results: Resultados en Google Shopping
-        
-    Returns:
-        Score de saturación 0-100
+    Calcula score de saturación 0-100 alineado con los criterios de competencia:
+    - >20 vendedores: ALTA COMPETICIÓN (Saturado, score >= 65)
+    - 5-20 vendedores: COMPETENCIA MODERADA (Viable, score 30-64)
+    - <5 vendedores: OPORTUNIDAD (Alta prioridad, score < 30)
     """
-    score = 0.0
-    
-    # Peso: Mercado Libre (50%)
-    if mercadolibre_sellers > 100:
-        score += 50
-    elif mercadolibre_sellers > 50:
-        score += 40
-    elif mercadolibre_sellers > 30:
-        score += 30
-    elif mercadolibre_sellers > 10:
-        score += 15
+    # Base por competencia en Mercado Libre (Paso 2.2)
+    if mercadolibre_sellers > 20:
+        score = 70.0
+        if mercadolibre_sellers > 50:
+            score += 15.0
+    elif 5 <= mercadolibre_sellers <= 20:
+        score = 40.0
     else:
-        score += 5
+        score = 15.0
     
-    # Peso: Retail (30%)
-    if retail_stores >= 5:
-        score += 30
-    elif retail_stores >= 3:
-        score += 20
+    # Penalización por presencia en retail establecido
+    if retail_stores >= 3:
+        score = max(score, 75.0)  # Si está en retail grande, se clasifica como alta competencia
     elif retail_stores >= 1:
-        score += 10
-    else:
-        score += 0
-    
-    # Peso: Google Shopping (20%)
-    if google_results > 200:
-        score += 20
-    elif google_results > 100:
-        score += 15
+        score += 10.0
+        
+    # Penalización por resultados en Google Shopping
+    if google_results > 100:
+        score += 10.0
     elif google_results > 50:
-        score += 10
-    elif google_results > 20:
-        score += 5
-    else:
-        score += 0
+        score += 5.0
     
-    return round(score, 2)
+    return min(round(score, 2), 100.0)
 
 
 def determine_saturation_level(score: float) -> str:
     """
     Determina nivel de saturación basado en score.
-    
-    Args:
-        score: Score de saturación 0-100
-        
-    Returns:
-        Nivel: "low", "medium", "high", "very_high"
     """
-    if score < 20:
-        return "low"
-    elif score < 40:
-        return "medium"
-    elif score < 60:
-        return "high"
+    if score < 30:
+        return "low"       # Oportunidad (<5 vendedores)
+    elif score < 65:
+        return "medium"    # Competencia moderada (5-20 vendedores)
+    elif score < 85:
+        return "high"      # Alta competencia (>20 vendedores)
     else:
-        return "very_high"
+        return "very_high" # Muy saturado
 
 
 def generate_recommendation(saturation_result: MarketSaturationResult) -> str:

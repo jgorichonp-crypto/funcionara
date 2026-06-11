@@ -14,6 +14,13 @@ class Settings(BaseSettings):
     meta_access_token: str = "EAAtest-placeholder"
     meta_ad_account_id: str = "act_123456789"
     
+    # RapidAPI Integration (TikTok Trends API)
+    rapidapi_key: Optional[str] = None
+    rapidapi_host: str = "tiktok-trends-api.p.rapidapi.com"
+    
+    # Apify Integration (Meta Ads Library Scraper)
+    apify_token: Optional[str] = None
+    
     # Dropi Integration
     dropi_api_key: str = "your-dropi-api-key-here"
     dropi_product_id: int = 123456
