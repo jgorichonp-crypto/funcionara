@@ -1,0 +1,29 @@
+{
+    "nichos_procesados": [
+        "viral skincare devices",
+        "smart travel organizers",
+        "pet mental stimulation toys"
+    ],
+    "productos_rechazados": [
+        "6 Pack Clear Hard Shell Zipper Case, Clear Zipper Pouches Waterproof Makeup Organizer & Travel Toiletry Bag, Diaper Bag Organizing Pouches, Plastic Pouch for Office Home Storage,"
+    ],
+    "terminos_saturados": [
+        "Estuches organizadores"
+    ],
+    "ganadores_detalle": [],
+    "descartados_sin_proveedor": [],
+    "descartados_saturados": [
+        {
+            "tiktok_ingles": "6 Pack Clear Hard Shell Zipper Case, Clear Zipper Pouches Waterproof Makeup Organizer & Travel Toiletry Bag, Diaper Bag Organizing Pouches, Plastic Pouch for Office Home Storage,",
+            "producto_espanol": "Estuches organizadores",
+            "smartcommerce_id": "692775d647a4476e096cc185",
+            "ventas_locales_sc": 0,
+            "stock_local_sc": 356,
+            "meta_search_query": "Estuches organizadores",
+            "meta_anuncios_activos": 24,
+            "motivo_descarte": "SATURADO",
+            "dropi_search_term_es": "Estuches organizadores",
+            "dropi_search_term_en": "6 Pack Clear"
+        }
+    ]
+}

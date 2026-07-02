@@ -214,6 +214,39 @@ def update_order_status(dropi_order_id: str, status: str) -> bool:
     return False
 
 
+def update_order_dropi_id(temp_order_id: str, real_dropi_id: str) -> bool:
+    """Actualiza el ID de la orden en la base de datos local reemplazando el ID temporal por el real de Dropi."""
+    now_str = datetime.now().isoformat()
+    placeholder = "%s" if is_postgres() else "?"
+    query = f"""
+    UPDATE orders 
+    SET dropi_order_id = {placeholder}, updated_at = {placeholder} 
+    WHERE dropi_order_id = {placeholder}
+    """
+    try:
+        rowcount = 0
+        if is_postgres():
+            with get_db_connection() as conn:
+                with conn.cursor() as cur:
+                    cur.execute(query, (real_dropi_id, now_str, temp_order_id))
+                    rowcount = cur.rowcount
+                conn.commit()
+        else:
+            with get_db_connection() as conn:
+                cursor = conn.execute(query, (real_dropi_id, now_str, temp_order_id))
+                conn.commit()
+                rowcount = cursor.rowcount
+                
+        if rowcount > 0:
+            logger.info(f"🔄 ID de Pedido actualizado localmente: {temp_order_id} -> {real_dropi_id}")
+            return True
+        else:
+            logger.warning(f"⚠️ No se encontró el pedido {temp_order_id} para actualizar ID.")
+    except Exception as e:
+        logger.error(f"❌ Error al actualizar ID del pedido en BD: {str(e)}")
+    return False
+
+
 def get_all_orders() -> List[Dict]:
     """Retorna todas las órdenes registradas en la base de datos."""
     query = "SELECT * FROM orders ORDER BY id DESC"

@@ -1,0 +1,58 @@
+[
+    {
+        "dropi_id": 65391,
+        "nombre": "Socket Fanlight Ventilador con luz VN",
+        "stock_disponible": 2994,
+        "ventas_totales_dropi": 0,
+        "costo_compra_clp": 11900.0,
+        "precio_venta_sugerido_clp": 29800,
+        "margen_bruto_estimado_clp": 14400.0,
+        "anuncios_activos_meta": 0,
+        "densidad_competencia": "NICHO VIRGEN (OCEANO AZUL)",
+        "urls_tiendas_competencia": [],
+        "viable_para_hijacking": true,
+        "observaciones_veredicto": "Aprobado para venta inmediata"
+    },
+    {
+        "dropi_id": 46066,
+        "nombre": "Silicona exfoliante de baño X2",
+        "stock_disponible": 826,
+        "ventas_totales_dropi": 0,
+        "costo_compra_clp": 3950.0,
+        "precio_venta_sugerido_clp": 11800,
+        "margen_bruto_estimado_clp": 4350.0,
+        "anuncios_activos_meta": 99,
+        "densidad_competencia": "DESCONOCIDO",
+        "urls_tiendas_competencia": [],
+        "viable_para_hijacking": false,
+        "observaciones_veredicto": "Margen comercial demasiado bajo ($4,350 CLP)"
+    },
+    {
+        "dropi_id": 97445,
+        "nombre": "Lentes Inteligentes Inalámbricos Touch",
+        "stock_disponible": 88,
+        "ventas_totales_dropi": 0,
+        "costo_compra_clp": 9990.0,
+        "precio_venta_sugerido_clp": 30000,
+        "margen_bruto_estimado_clp": 16510.0,
+        "anuncios_activos_meta": 2,
+        "densidad_competencia": "OPORTUNIDAD VALIDADA (BAJA COMPETENCIA)",
+        "urls_tiendas_competencia": [],
+        "viable_para_hijacking": true,
+        "observaciones_veredicto": "Aprobado para venta inmediata"
+    },
+    {
+        "dropi_id": 35153,
+        "nombre": "Lámpara Velador Hongo 7 Colores Led",
+        "stock_disponible": 110,
+        "ventas_totales_dropi": 0,
+        "costo_compra_clp": 5000.0,
+        "precio_venta_sugerido_clp": 15000,
+        "margen_bruto_estimado_clp": 6500.0,
+        "anuncios_activos_meta": 0,
+        "densidad_competencia": "NICHO VIRGEN (OCEANO AZUL)",
+        "urls_tiendas_competencia": [],
+        "viable_para_hijacking": false,
+        "observaciones_veredicto": "Margen comercial demasiado bajo ($6,500 CLP)"
+    }
+]

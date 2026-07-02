@@ -6,7 +6,7 @@ import io
 
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
 
-TOKEN = "TU_APIFY_TOKEN"
+TOKEN = "YOUR_APIFY_TOKEN"
 ACTOR = "clockworks~free-tiktok-scraper"
 
 async def main():

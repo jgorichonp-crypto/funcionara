@@ -206,29 +206,63 @@ async def process_incoming_reply(from_phone: str, reply_text: str) -> bool:
     if is_confirm:
         logger.info(f"✅ El cliente {client_name} ha CONFIRMADO el pedido {dropi_order_id} ({product_name}).")
         
-        # Actualizar base de datos local
-        update_order_status(dropi_order_id, "CONFIRMED")
+        # Importaciones diferidas para evitar importación circular
+        from server import send_order_to_dropi_api
+        from utils.sheets_helper import update_order_status_in_sheets
+        from database import update_order_dropi_id, update_order_status
         
-        # Sincronizar estado con Dropi Chile
-        await update_dropi_order_status(dropi_order_id, "CONFIRMED")
-        
-        # Enviar confirmación al cliente
-        msg = (
-            f"¡Excelente *{client_name}*! 🎉 Tu pedido ha sido confirmado con éxito.\n"
-            f"Lo estamos preparando para despacharlo de inmediato. Próximamente te enviaremos el link de seguimiento de tu entrega.\n"
-            f"¡Que tengas un excelente día! 🚚📦"
-        )
+        # 1. Crear el pedido real en Dropi Chile
+        real_dropi_id = None
+        try:
+            real_dropi_id = send_order_to_dropi_api({
+                "name": order["client_name"],
+                "phone": order["phone"],
+                "address": order["address"],
+                "city": order["city"],
+                "product_name": order["product_name"],
+                "product_price": order["price"]
+            })
+        except Exception as e:
+            logger.error(f"❌ Error al crear pedido en Dropi tras confirmación: {str(e)}")
+            
+        if real_dropi_id:
+            # 2. Actualizar ID en base de datos local (de temporal a real)
+            update_order_dropi_id(dropi_order_id, real_dropi_id)
+            
+            # 3. Actualizar estado local a CONFIRMED
+            update_order_status(real_dropi_id, "CONFIRMED")
+            
+            # 4. Actualizar estado e ID Dropi en Google Sheets
+            update_order_status_in_sheets(dropi_order_id, "CONFIRMADO", real_dropi_id)
+            
+            # Enviar confirmación de éxito al cliente
+            msg = (
+                f"¡Excelente *{client_name}*! 🎉 Tu pedido ha sido confirmado con éxito.\n"
+                f"Lo estamos preparando para despacharlo de inmediato. Próximamente te enviaremos el link de seguimiento de tu entrega.\n"
+                f"¡Que tengas un excelente día! 🚚📦"
+            )
+        else:
+            # Si falló la comunicación pero el cliente confirmó
+            update_order_status(dropi_order_id, "CONFIRMED")
+            update_order_status_in_sheets(dropi_order_id, "CONFIRMADO (ERROR DROPI)")
+            msg = (
+                f"¡Gracias *{client_name}*! Tu pedido ha sido verificado. 📝\n"
+                f"Nuestros ejecutivos procesarán el despacho de forma manual a la brevedad. ¡Que tengas un excelente día! 🚚"
+            )
+            
         await send_whatsapp_message(from_phone, msg)
         return True
         
     elif is_cancel:
         logger.info(f"❌ El cliente {client_name} ha CANCELADO el pedido {dropi_order_id} ({product_name}).")
         
+        from utils.sheets_helper import update_order_status_in_sheets
+        
         # Actualizar base de datos local
         update_order_status(dropi_order_id, "CANCELLED")
         
-        # Sincronizar estado con Dropi Chile
-        await update_dropi_order_status(dropi_order_id, "CANCELLED")
+        # Actualizar estado en Google Sheets
+        update_order_status_in_sheets(dropi_order_id, "CANCELADO")
         
         # Enviar mensaje de confirmación de cancelación
         msg = (

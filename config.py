@@ -26,9 +26,15 @@ class Settings(BaseSettings):
     dropi_product_id: int = 123456
     dropi_email: Optional[str] = None
     dropi_password: Optional[str] = None
+    dropi_email_gt: Optional[str] = None
+    dropi_password_gt: Optional[str] = None
     dropi_product_name: str = "Producto de Tienda"
     dropi_product_price: float = 0.0
     dropi_supplier_id: Optional[int] = None
+    
+    # SmartCommerce Integration
+    smartcommerce_email: Optional[str] = None
+    smartcommerce_password: Optional[str] = None
     
     # WhatsApp Integration
     whatsapp_provider: str = "mock"  # "mock", "evolution", o "twilio"
@@ -39,6 +45,9 @@ class Settings(BaseSettings):
     
     # Database Integration (PostgreSQL / Supabase)
     database_url: Optional[str] = None
+    
+    # Google Sheets Integration
+    google_sheet_webapp_url: Optional[str] = None
     
     # Deployment
     vercel_token: str = "vercel-test-token-placeholder"

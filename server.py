@@ -253,66 +253,32 @@ async def serve_landing():
         )
 
 
-@app.post("/api/order")
-def create_order(order: OrderRequest, background_tasks: BackgroundTasks):
+def send_order_to_dropi_api(order_data: dict) -> Optional[str]:
     """
-    Recibe los datos del cliente, inicia sesión en Dropi de forma automática y crea
-    la orden usando la API de usuario. Se ejecuta síncronamente en el pool de hilos de FastAPI.
+    Inicia sesión en Dropi Chile y crea la orden de forma real con estado APROBADO.
+    Retorna el ID de la orden creada en Dropi si tiene éxito.
     """
-    logger.info(f"📥 Pedido recibido: {order.name} - {order.phone} - {order.city}")
-    
-    # Obtener token de sesión
     token = get_dropi_token()
     
     # 1. Si no hay token de sesión (modo simulación o credenciales incorrectas)
     if not token:
         logger.info(
-            f"🧪 [MODO SIMULACIÓN] Registrando orden ficticia en Dropi Chile:\n"
+            f"🧪 [MODO SIMULACIÓN] Creando orden ficticia en Dropi Chile:\n"
             f"  - Producto ID: {settings.dropi_product_id}\n"
             f"  - Nombre: {settings.dropi_product_name}\n"
-            f"  - Cliente: {order.name}\n"
-            f"  - Fono: {order.phone}\n"
-            f"  - Destino: {order.address}, {order.city}"
+            f"  - Cliente: {order_data.get('name')}\n"
+            f"  - Fono: {order_data.get('phone')}\n"
+            f"  - Destino: {order_data.get('address')}, {order_data.get('city')}"
         )
-        dropi_order_id = "SIM-COD-98274"
-        
-        # Persistir en la BD local
-        from database import save_order
-        save_order(
-            dropi_order_id=dropi_order_id,
-            client_name=order.name,
-            phone=order.phone,
-            address=order.address,
-            city=order.city,
-            product_name=settings.dropi_product_name or "Producto Simulado",
-            price=settings.dropi_product_price or 19990.0
-        )
-        
-        # Enviar confirmación por WhatsApp en segundo plano
-        from agents.crm import send_order_confirmation_request
-        background_tasks.add_task(send_order_confirmation_request, {
-            "client_name": order.name,
-            "phone": order.phone,
-            "product_name": settings.dropi_product_name or "Producto Simulado",
-            "price": settings.dropi_product_price or 19990.0,
-            "address": order.address,
-            "city": order.city,
-            "dropi_order_id": dropi_order_id
-        })
-        
-        return {
-            "status": "success",
-            "message": "Pedido simulado registrado exitosamente en Dropi Chile (Modo Desarrollo)",
-            "order_id": dropi_order_id
-        }
+        return "SIM-COD-" + str(int(time.time()))[-5:]
         
     logger.info(f"🚀 Iniciando envío de orden real a Dropi Chile (Producto ID: {settings.dropi_product_id})...")
     
     # 2. Configurar fallbacks para detalles de producto
-    p_id = order.product_id if order.product_id else settings.dropi_product_id
-    product_name = order.product_name if order.product_name else (settings.dropi_product_name or "Producto de Tienda")
-    product_price = order.product_price if order.product_price else (settings.dropi_product_price or 19990.0)
-    supplier_id = order.supplier_id if order.supplier_id else (settings.dropi_supplier_id or 2924)
+    p_id = order_data.get("product_id") or settings.dropi_product_id
+    product_name = order_data.get("product_name") or (settings.dropi_product_name or "Producto de Tienda")
+    product_price = order_data.get("product_price") or (settings.dropi_product_price or 19990.0)
+    supplier_id = order_data.get("supplier_id") or (settings.dropi_supplier_id or 2924)
     
     # Intentar obtener información de producto del catálogo dinámicamente si es posible
     headers = {
@@ -332,41 +298,36 @@ def create_order(order: OrderRequest, background_tasks: BackgroundTasks):
             if prod_data.get("isSuccess") and prod_data.get("objects"):
                 prod_obj = prod_data["objects"]
                 product_name = prod_obj.get("name", product_name)
-                # Usar el precio de venta sugerido o el del env si está configurado
                 if not settings.dropi_product_price:
                     product_price = float(prod_obj.get("sale_price") or prod_obj.get("price") or product_price)
                 supplier_id = prod_obj.get("user_id") or prod_obj.get("supplier_id") or supplier_id
                 logger.info(f"✅ Detalles del producto recuperados: '{product_name}' - Proveedor ID: {supplier_id}")
-            else:
-                logger.warning(f"⚠️ La respuesta de Dropi no tiene datos de producto válidos: {prod_data.get('message')}")
-        else:
-            logger.warning(f"⚠️ No se pudo obtener información del producto (Status {prod_resp.status_code}). Usando valores estáticos/fallback.")
     except Exception as e:
         logger.warning(f"⚠️ Error de conexión al buscar detalles del producto: {str(e)}. Usando fallbacks.")
         
     # 3. Formatear nombres y geografía
-    name_parts = order.name.strip().split(" ", 1)
+    name_parts = order_data["name"].strip().split(" ", 1)
     first_name = name_parts[0]
     last_name = name_parts[1] if len(name_parts) > 1 else " "
     
-    state_val, city_val = get_geographic_details(order.city)
+    state_val, city_val = get_geographic_details(order_data["city"])
     logger.info(f"🗺️ Geografía mapeada: Región = '{state_val}', Comuna = '{city_val}'")
     
     # 4. Formatear la orden
     url = "https://api.dropi.cl/api/orders/myorders"
     payload = {
         "total_order": product_price,
-        "notes": "Pedido creado automáticamente desde Landing Page",
+        "notes": "Pedido creado automáticamente y confirmado por WhatsApp",
         "name": first_name,
         "surname": last_name,
-        "dir": order.address,
+        "dir": order_data["address"],
         "country": "CL",
         "state": state_val,
         "city": city_val,
-        "phone": order.phone,
+        "phone": order_data["phone"],
         "client_email": "cliente_landing@mundoaura.cl",
         "payment_method_id": 1,  # COD / Pago contra entrega
-        "status": "PENDIENTE",   # Borrador / Pendiente de confirmación manual
+        "status": "APROBADO",   # APROBADO ya que fue validado por WhatsApp
         "type": "FINAL_ORDER",
         "rate_type": "CON RECAUDO",
         "products": [
@@ -379,7 +340,7 @@ def create_order(order: OrderRequest, background_tasks: BackgroundTasks):
         ],
         "calculate_costs_and_shiping": True,
         "supplier_id": supplier_id,
-        "shop_order_id": int(time.time())  # Genera ID de orden secuencial
+        "shop_order_id": int(time.time())
     }
     
     def send_post_request(auth_token):
@@ -395,8 +356,6 @@ def create_order(order: OrderRequest, background_tasks: BackgroundTasks):
     logger.info(f"🚀 Enviando orden a Dropi: {url}...")
     try:
         response = send_post_request(token)
-        
-        # Si el token expiró durante la transacción (401/403), refrescamos token y reintentamos
         if response.status_code in [401, 403]:
             logger.info("🔄 Token de sesión expirado. Intentando refrescar token...")
             token = get_dropi_token(force_refresh=True)
@@ -423,55 +382,73 @@ def create_order(order: OrderRequest, background_tasks: BackgroundTasks):
             if not dropi_order_id and isinstance(response_json, dict):
                 dropi_order_id = response_json.get("order_id") or response_json.get("id")
             dropi_order_id = str(dropi_order_id or "OK")
-            
             logger.info(f"✅ Pedido creado en Dropi con éxito. ID: {dropi_order_id}")
-            
-            # Persistir en la BD local
-            from database import save_order
-            save_order(
-                dropi_order_id=dropi_order_id,
-                client_name=order.name,
-                phone=order.phone,
-                address=order.address,
-                city=order.city,
-                product_name=product_name,
-                price=product_price
-            )
-            
-            # Enviar confirmación por WhatsApp en segundo plano
-            from agents.crm import send_order_confirmation_request
-            background_tasks.add_task(send_order_confirmation_request, {
-                "client_name": order.name,
-                "phone": order.phone,
-                "product_name": product_name,
-                "price": product_price,
-                "address": order.address,
-                "city": order.city,
-                "dropi_order_id": dropi_order_id
-            })
-            
-            return {
-                "status": "success",
-                "message": "Pedido registrado exitosamente en Dropi Chile.",
-                "order_id": dropi_order_id
-            }
+            return dropi_order_id
         else:
             logger.error(f"❌ Error en API de Dropi: {msg}")
-            return JSONResponse(
-                status_code=400,
-                content={
-                    "status": "error",
-                    "message": f"Dropi devolvió error: {msg}",
-                    "detail": response_text
-                }
-            )
-            
+            raise Exception(f"Dropi devolvió error: {msg}")
     except Exception as e:
         logger.error(f"❌ Excepción al conectar con Dropi: {str(e)}")
-        raise HTTPException(
-            status_code=500,
-            detail=f"Error de conexión con el proveedor Dropi: {str(e)}"
-        )
+        raise e
+
+
+@app.post("/api/order")
+def create_order(order: OrderRequest, background_tasks: BackgroundTasks):
+    """
+    Recibe los datos del cliente, genera un ID temporal, registra en la base de datos
+    local y en Google Sheets como PENDIENTE, y encola la confirmación de WhatsApp.
+    """
+    temp_id = f"TEMP-{int(time.time())}"
+    logger.info(f"📥 Pedido inicial recibido: {order.name} - {order.phone} - {order.city}. Asignado ID temporal: {temp_id}")
+    
+    # Configurar detalles de producto
+    p_id = order.product_id if order.product_id else settings.dropi_product_id
+    product_name = order.product_name if order.product_name else (settings.dropi_product_name or "Producto de Tienda")
+    product_price = order.product_price if order.product_price else (settings.dropi_product_price or 19990.0)
+    
+    # 1. Guardar en la base de datos local
+    from database import save_order
+    save_order(
+        dropi_order_id=temp_id,
+        client_name=order.name,
+        phone=order.phone,
+        address=order.address,
+        city=order.city,
+        product_name=product_name,
+        price=product_price,
+        status="PENDING_CONFIRMATION"
+    )
+    
+    # 2. Guardar en Google Sheets vía Apps Script
+    from utils.sheets_helper import save_order_to_sheets
+    background_tasks.add_task(
+        save_order_to_sheets,
+        order_id=temp_id,
+        client_name=order.name,
+        phone=order.phone,
+        address=order.address,
+        city=order.city,
+        product_name=f"{product_name} ({p_id})",
+        price=product_price
+    )
+    
+    # 3. Enviar confirmación por WhatsApp en segundo plano
+    from agents.crm import send_order_confirmation_request
+    background_tasks.add_task(send_order_confirmation_request, {
+        "client_name": order.name,
+        "phone": order.phone,
+        "product_name": product_name,
+        "price": product_price,
+        "address": order.address,
+        "city": order.city,
+        "dropi_order_id": temp_id
+    })
+    
+    return {
+        "status": "success",
+        "message": "Pedido recibido. Pendiente de confirmación por WhatsApp.",
+        "order_id": temp_id
+    }
 
 
 @app.on_event("startup")
