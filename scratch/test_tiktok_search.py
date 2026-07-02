@@ -6,7 +6,7 @@ async def test_search():
     # Probar endpoint /search/keyword con query
     url = "https://tiktok-trends-api.p.rapidapi.com/search/keyword"
     headers = {
-        "x-rapidapi-key": "ed4a122b56msh6ad2745cca5d761p1b2bd2jsn16f0eefae65c",
+        "x-rapidapi-key": "YOUR_RAPIDAPI_KEY",
         "x-rapidapi-host": "tiktok-trends-api.p.rapidapi.com"
     }
     

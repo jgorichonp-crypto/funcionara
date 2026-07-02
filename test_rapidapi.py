@@ -1,10 +1,11 @@
+from config import settings
 import requests
 import json
 
 url = "https://tiktok-shop-scraper-api.p.rapidapi.com/shop/search"
 headers = {
     "x-rapidapi-host": "tiktok-shop-scraper-api.p.rapidapi.com",
-    "x-rapidapi-key": "ed4a122b56msh6ad2745cca5d761p1b2bd2jsn16f0eefae65c"
+    "x-rapidapi-key": settings.rapidapi_key
 }
 querystring = {"query": "kitchen gadgets", "limit": "5"}
 
