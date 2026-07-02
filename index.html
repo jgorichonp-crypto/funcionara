@@ -968,7 +968,14 @@ src="https://www.facebook.com/tr?id=1004224458768338&ev=PageView&noscript=1"
                 product_id: 70445,
                 product_name: "Collagen Peptides Multi",
                 product_price: priceNum,
-                supplier_id: null
+                supplier_id: null,
+                rut: document.getElementById('rut').value,
+                email: document.getElementById('codEmail').value,
+                calle: document.getElementById('codAddress').value,
+                n_casa: document.getElementById('codApt').value,
+                region: regionText,
+                comuna: comunaText,
+                unidades: selectedUnits === '1 Unidad' ? 1 : 2
             };
 
             try {

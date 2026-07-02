@@ -38,6 +38,13 @@ class OrderRequest(BaseModel):
     product_name: Optional[str] = None
     product_price: Optional[float] = None
     supplier_id: Optional[int] = None
+    rut: Optional[str] = None
+    email: Optional[str] = None
+    calle: Optional[str] = None
+    n_casa: Optional[str] = None
+    region: Optional[str] = None
+    comuna: Optional[str] = None
+    unidades: Optional[int] = 1
 
 
 # Sesión de usuario persistida en memoria para Dropi Chile
@@ -393,7 +400,7 @@ def send_order_to_dropi_api(order_data: dict) -> Optional[str]:
 
 
 @app.post("/api/order")
-def create_order(order: OrderRequest, background_tasks: BackgroundTasks):
+async def create_order(order: OrderRequest, background_tasks: BackgroundTasks):
     """
     Recibe los datos del cliente, genera un ID temporal, registra en la base de datos
     local y en Google Sheets como PENDIENTE, y encola la confirmación de WhatsApp.
@@ -419,30 +426,42 @@ def create_order(order: OrderRequest, background_tasks: BackgroundTasks):
         status="PENDING_CONFIRMATION"
     )
     
-    # 2. Guardar en Google Sheets vía Apps Script
+    # 2. Guardar en Google Sheets vía Apps Script (Ejecución directa para Serverless/Vercel)
     from utils.sheets_helper import save_order_to_sheets
-    background_tasks.add_task(
-        save_order_to_sheets,
-        order_id=temp_id,
-        client_name=order.name,
-        phone=order.phone,
-        address=order.address,
-        city=order.city,
-        product_name=f"{product_name} ({p_id})",
-        price=product_price
-    )
+    try:
+        save_order_to_sheets(
+            order_id=temp_id,
+            client_name=order.name,
+            phone=order.phone,
+            address=order.address,
+            city=order.city,
+            product_name=f"{product_name} ({p_id})",
+            price=product_price,
+            rut=order.rut or "",
+            email=order.email or "",
+            calle=order.calle or "",
+            n_casa=order.n_casa or "",
+            region=order.region or "",
+            comuna=order.comuna or "",
+            unidades=order.unidades or 1
+        )
+    except Exception as e:
+        logger.error(f"❌ Error al guardar en Google Sheets: {e}")
     
-    # 3. Enviar confirmación por WhatsApp en segundo plano
+    # 3. Enviar confirmación por WhatsApp (Ejecución directa para Serverless/Vercel)
     from agents.crm import send_order_confirmation_request
-    background_tasks.add_task(send_order_confirmation_request, {
-        "client_name": order.name,
-        "phone": order.phone,
-        "product_name": product_name,
-        "price": product_price,
-        "address": order.address,
-        "city": order.city,
-        "dropi_order_id": temp_id
-    })
+    try:
+        await send_order_confirmation_request({
+            "client_name": order.name,
+            "phone": order.phone,
+            "product_name": product_name,
+            "price": product_price,
+            "address": order.address,
+            "city": order.city,
+            "dropi_order_id": temp_id
+        })
+    except Exception as e:
+        logger.error(f"❌ Error al enviar confirmación de WhatsApp: {e}")
     
     return {
         "status": "success",

@@ -17,7 +17,14 @@ def save_order_to_sheets(
     address: str,
     city: str,
     product_name: str,
-    price: float
+    price: float,
+    rut: str = "",
+    email: str = "",
+    calle: str = "",
+    n_casa: str = "",
+    region: str = "",
+    comuna: str = "",
+    unidades: int = 1
 ) -> bool:
     """
     Envía un nuevo pedido a Google Sheets vía el Webapp de Google Apps Script.
@@ -41,7 +48,14 @@ def save_order_to_sheets(
         "address": address,
         "city": city,
         "product_name": product_name,
-        "price": price
+        "price": price,
+        "rut": rut,
+        "email": email,
+        "calle": calle,
+        "n_casa": n_casa,
+        "region": region,
+        "comuna": comuna,
+        "unidades": unidades
     }
 
     try:
