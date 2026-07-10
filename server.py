@@ -22,11 +22,16 @@ logger = logging.getLogger("DropiServer")
 
 app = FastAPI(title="Dropshipping COD Backend")
 
-# Montar carpeta de assets generados para poder servir la imagen del producto
+# Montar carpetas de assets
 if os.path.exists("generated_assets"):
     app.mount("/generated_assets", StaticFiles(directory="generated_assets"), name="generated_assets")
 else:
     logger.warning("⚠️  La carpeta 'generated_assets' no existe. Asegúrate de correr 'python main.py' primero.")
+
+if os.path.exists("assets"):
+    app.mount("/assets", StaticFiles(directory="assets"), name="assets")
+else:
+    logger.warning("⚠️  La carpeta 'assets' no existe. Los recursos estáticos no se servirán.")
 
 
 class OrderRequest(BaseModel):
