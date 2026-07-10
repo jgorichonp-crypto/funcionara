@@ -209,7 +209,7 @@ async def process_incoming_reply(from_phone: str, reply_text: str) -> bool:
         # Importaciones diferidas para evitar importación circular
         from server import send_order_to_dropi_api
         from utils.sheets_helper import update_order_status_in_sheets
-        from database import update_order_dropi_id, update_order_status
+        from database import update_order_dropi_id
         
         # 1. Crear el pedido real en Dropi Chile
         real_dropi_id = None
