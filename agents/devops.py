@@ -62,11 +62,11 @@ def _generate_html_template(state: ProductState) -> str:
     t.src=v;s=b.getElementsByTagName(e)[0];
     s.parentNode.insertBefore(t,s)}}(window, document,'script',
     'https://connect.facebook.net/en_US/fbevents.js');
-    fbq('init', '120252346190180635');
+    fbq('init', '1051864450604425');
     fbq('track', 'PageView');
     </script>
     <noscript><img height="1" width="1" style="display:none"
-    src="https://www.facebook.com/tr?id=120252346190180635&ev=PageView&noscript=1"
+    src="https://www.facebook.com/tr?id=1051864450604425&ev=PageView&noscript=1"
     /></noscript>
     <!-- End Meta Pixel Code -->
 </head>
