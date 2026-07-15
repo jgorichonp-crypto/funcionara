@@ -411,7 +411,7 @@ async def create_order(order: OrderRequest, background_tasks: BackgroundTasks):
     local y en Google Sheets como PENDIENTE, y encola la confirmación de WhatsApp.
     """
     temp_id = f"TEMP-{int(time.time())}"
-    logger.info(f"📥 Pedido inicial recibido: {order.name} - {order.phone} - {order.city}. Asignado ID temporal: {temp_id}")
+    logger.info(f"📥 Pedido inicial recibido: {order.name} - {order.phone} - {order.city} - Email: {order.email}. Asignado ID temporal: {temp_id}")
     
     # Configurar detalles de producto
     p_id = order.product_id if order.product_id else settings.dropi_product_id
@@ -471,8 +471,10 @@ async def create_order(order: OrderRequest, background_tasks: BackgroundTasks):
     return {
         "status": "success",
         "message": "Pedido recibido. Pendiente de confirmación por WhatsApp.",
-        "order_id": temp_id
+        "order_id": temp_id,
+        "debug_email": order.email
     }
+
 
 
 @app.on_event("startup")
