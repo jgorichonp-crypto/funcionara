@@ -38,13 +38,30 @@ Apple/Linear Similarity: 9/10
 <!DOCTYPE html>
 <html lang="es" class="scroll-smooth">
 <head>
+<!-- Meta Pixel Code -->
+<script>
+!function(f,b,e,v,n,t,s)
+{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];
+s.parentNode.insertBefore(t,s)}(window, document,'script',
+'https://connect.facebook.net/en_US/fbevents.js');
+fbq('init', '1051864450604425'); // Píxel de Mundo Aura
+fbq('track', 'PageView');
+</script>
+<noscript><img height="1" width="1" style="display:none"
+src="https://www.facebook.com/tr?id=1051864450604425&ev=PageView&noscript=1"
+/></noscript>
+<!-- End Meta Pixel Code -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Colágeno Hidrolizado Multi Peptides | Piel, Cabello y Articulaciones | Chile - Mundo Aura</title>
-    <link rel="icon" type="image/png" href="assets/logo.png">
+    <link class="icon-link" rel="icon" type="image/png" href="assets/logo.png">
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link class="font-link" rel="preconnect" href="https://fonts.googleapis.com">
+    <link class="font-link" rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -67,26 +84,24 @@ Apple/Linear Similarity: 9/10
             display: flex;
             min-width: 200%;
         }
+
+        /* Bloquear seleccion de texto para proteger contenido */
+        body {
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+        /* Permitir seleccion en campos de entrada del formulario para que el cliente compre sin problemas */
+        input, textarea, select, [contenteditable="true"] {
+            -webkit-user-select: text;
+            -moz-user-select: text;
+            -ms-user-select: text;
+            user-select: text;
+        }
     </style>
     <!-- Confetti Library -->
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-<!-- Meta Pixel Code -->
-<script>
-!function(f,b,e,v,n,t,s)
-{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-n.queue=[];t=b.createElement(e);t.async=!0;
-t.src=v;s=b.getElementsByTagName(e)[0];
-s.parentNode.insertBefore(t,s)}(window, document,'script',
-'https://connect.facebook.net/en_US/fbevents.js');
-fbq('init', '1051864450604425'); // Píxel de Mundo Aura
-fbq('track', 'PageView');
-</script>
-<noscript><img height="1" width="1" style="display:none"
-src="https://www.facebook.com/tr?id=1051864450604425&ev=PageView&noscript=1"
-/></noscript>
-<!-- End Meta Pixel Code -->
 </head>
 <body class="bg-white text-gray-900 relative overflow-x-hidden">
     
@@ -1200,6 +1215,41 @@ src="https://www.facebook.com/tr?id=1051864450604425&ev=PageView&noscript=1"
   }
 </script>
 <script async src="https://www.tiktok.com/embed.js"></script>
+
+    <!-- Script de proteccion contra copia y descarga de imagenes -->
+    <script>
+        // Bloquear click derecho
+        document.addEventListener('contextmenu', function(e) {
+            e.preventDefault();
+        });
+
+        // Bloquear atajos de teclado para copiar o ver codigo fuente
+        document.addEventListener('keydown', function(e) {
+            // Ctrl+C o Cmd+C (Copiar)
+            if ((e.ctrlKey || e.metaKey) && e.key === 'c') {
+                e.preventDefault();
+            }
+            // Ctrl+U (Ver codigo fuente)
+            if ((e.ctrlKey || e.metaKey) && e.key === 'u') {
+                e.preventDefault();
+            }
+            // F12 (Herramientas de Desarrollador)
+            if (e.key === 'F12') {
+                e.preventDefault();
+            }
+            // Ctrl+Shift+I o Cmd+Opt+I (Inspeccionar)
+            if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key.toLowerCase() === 'i') {
+                e.preventDefault();
+            }
+        });
+
+        // Bloquear arrastrar y soltar imagenes (evita descargarlas arrastrando al escritorio o barra de busqueda)
+        document.addEventListener('dragstart', function(e) {
+            if (e.target.tagName === 'IMG') {
+                e.preventDefault();
+            }
+        });
+    </script>
 </body>
 
 </html>
