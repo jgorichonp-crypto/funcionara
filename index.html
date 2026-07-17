@@ -948,9 +948,24 @@ src="https://www.facebook.com/tr?id=1051864450604425&ev=PageView&noscript=1"
             // Validaciones de comuna seleccionada
             const regionSelect = document.getElementById('region');
             const comunaSelect = document.getElementById('comuna');
+            const comunaInputVal = document.getElementById('comunaInput').value.trim();
+            
             if (!regionSelect.value || !comunaSelect.value) {
-                alert('Por favor selecciona una comuna válida de la lista de sugerencias.');
-                return;
+                const todas = window.todasLasComunas || [];
+                const normalizedInput = comunaInputVal.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+                const matched = todas.find(item => 
+                    item.comunaName.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "") === normalizedInput ||
+                    `${item.comunaName} (${item.regionNombre})`.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "") === normalizedInput
+                );
+                
+                if (matched) {
+                    regionSelect.value = matched.regionKey;
+                    regionSelect.dispatchEvent(new Event('change'));
+                    comunaSelect.value = matched.comunaName;
+                } else {
+                    alert('Por favor selecciona una comuna válida de la lista de sugerencias.');
+                    return;
+                }
             }
 
             // Validaciones de teléfono
@@ -968,8 +983,6 @@ src="https://www.facebook.com/tr?id=1051864450604425&ev=PageView&noscript=1"
             submitBtn.disabled = true;
 
             const telefonoLimpio = phone.replace('+', '').replace(/\s+/g, '');
-            const regionSelect = document.getElementById('region');
-            const comunaSelect = document.getElementById('comuna');
             const regionText = regionSelect.options[regionSelect.selectedIndex].text;
             const comunaText = comunaSelect.value;
             const direccionCompleta = document.getElementById('codAddress').value + ' - ' + document.getElementById('codApt').value;
@@ -1203,7 +1216,8 @@ src="https://www.facebook.com/tr?id=1051864450604425&ev=PageView&noscript=1"
   const comunaSuggestions = document.getElementById('comunaSuggestions');
 
   // Crear la lista plana de comunas
-  const todasLasComunas = [];
+  window.todasLasComunas = [];
+  const todasLasComunas = window.todasLasComunas;
   for (const [regionKey, comunas] of Object.entries(comunasPorRegion)) {
     const regionNombre = regionNombres[regionKey] || regionKey;
     comunas.forEach(comuna => {
