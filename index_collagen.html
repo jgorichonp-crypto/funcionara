@@ -1067,7 +1067,7 @@ src="https://www.facebook.com/tr?id=1051864450604425&ev=PageView&noscript=1"
           <div class="p-5">
             <div class="text-center mb-5 mt-2">
               <h3 class="text-xl font-bold text-gray-900 mb-1">Completa tu Pedido</h3>
-              <p class="text-[11px] text-gray-500">Completa tus datos correctamente para poder hacerte llegar el producto</p>
+              <p class="text-[11px] text-gray-500">Completa tus datos correctamente para poder hacerte llegar el producto. Te contactaremos vía WhatsApp para confirmar tu envío.</p>
             </div>
           <div class="bg-gray-50 p-3 rounded-xl border border-gray-100 flex items-center gap-3 mb-5">
             <div class="flex-1">
@@ -1084,10 +1084,7 @@ src="https://www.facebook.com/tr?id=1051864450604425&ev=PageView&noscript=1"
                 <label class="block text-[10px] font-bold text-gray-700 uppercase tracking-wider mb-1">Nombre</label>
                 <input type="text" id="codName" required class="w-full bg-white border border-gray-200 rounded-lg px-3 py-2.5 text-sm text-gray-900 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 outline-none transition-colors" placeholder="Juan Pérez" oninput="this.value = this.value.replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑ\s]/g, '')">
             </div>
-            <div>
-                <label class="block text-[10px] font-bold text-gray-700 uppercase tracking-wider mb-1">Correo Electrónico <span class="text-gray-400 font-normal normal-case">(Opcional)</span></label>
-                <input type="email" id="codEmail" class="w-full bg-white border border-gray-200 rounded-lg px-3 py-2.5 text-sm text-gray-900 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 outline-none transition-colors" placeholder="Ej: nombre@correo.com">
-            </div>
+            <input type="hidden" id="codEmail" value="">
             <div>
                 <label class="block text-[10px] font-bold text-gray-700 uppercase tracking-wider mb-1">Teléfono (WhatsApp)</label>
                 <input type="tel" id="codPhone" required class="w-full bg-white border border-gray-200 rounded-lg px-3 py-2.5 text-sm text-gray-900 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 outline-none transition-colors" placeholder="+56 9 1234 5678" value="+56 " oninput="let v = this.value; if(!v.startsWith('+56 ')) { this.value = '+56 '; return; } let num = v.substring(4).replace(/[^0-9]/g, ''); this.value = '+56 ' + num;">
