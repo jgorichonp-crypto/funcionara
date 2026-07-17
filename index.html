@@ -59,7 +59,7 @@ src="https://www.facebook.com/tr?id=1051864450604425&ev=PageView&noscript=1"
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Aceite De Orégano con Aceite de Semilla Negra 6000 Mg | Limpieza Digestiva e Inmune | Chile - Mundo Aura</title>
     <link class="icon-link" rel="icon" type="image/png" href="assets/logo.png">
-    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="assets/css/styles.min.css">
     <link class="font-link" rel="preconnect" href="https://fonts.googleapis.com">
     <link class="font-link" rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -406,7 +406,7 @@ src="https://www.facebook.com/tr?id=1051864450604425&ev=PageView&noscript=1"
                             <!-- Placeholder Photo -->
                             <div class="w-full bg-gray-100 rounded-lg overflow-hidden border border-gray-100 mb-2.5">
                                 
-                                <img src="assets/reseñas/reseña.png" alt="Foto de reseña" class="w-full h-auto object-contain max-h-[350px]" onerror="this.style.display='none'">
+                                <img src="assets/reseñas/reseña.png" loading="lazy" alt="Foto de reseña" class="w-full h-auto object-contain max-h-[350px]" onerror="this.style.display='none'">
                             </div>
                             
                             <!-- Reactions -->
@@ -469,7 +469,7 @@ src="https://www.facebook.com/tr?id=1051864450604425&ev=PageView&noscript=1"
                             <!-- Placeholder Photo -->
                             <div class="w-full bg-gray-100 rounded-lg overflow-hidden border border-gray-100 mb-2.5">
                                 
-                                <img src="assets/reseñas/l (1).avif" alt="Foto de reseña" class="w-full h-auto object-contain max-h-[350px]" onerror="this.style.display='none'">
+                                <img src="assets/reseñas/l (1).avif" loading="lazy" alt="Foto de reseña" class="w-full h-auto object-contain max-h-[350px]" onerror="this.style.display='none'">
                             </div>
                             
                             <!-- Reactions -->
@@ -532,7 +532,7 @@ src="https://www.facebook.com/tr?id=1051864450604425&ev=PageView&noscript=1"
                             <!-- Placeholder Photo -->
                             <div class="w-full bg-gray-100 rounded-lg overflow-hidden border border-gray-100 mb-2.5">
                                 
-                                <img src="assets/reseñas/reseña2.png" alt="Foto de reseña" class="w-full h-auto object-contain max-h-[350px]" onerror="this.style.display='none'">
+                                <img src="assets/reseñas/reseña2.png" loading="lazy" alt="Foto de reseña" class="w-full h-auto object-contain max-h-[350px]" onerror="this.style.display='none'">
                             </div>
                             
                             <!-- Reactions -->
@@ -635,7 +635,7 @@ src="https://www.facebook.com/tr?id=1051864450604425&ev=PageView&noscript=1"
                     <!-- GIF Right -->
                     <div class="flex justify-center md:justify-end w-full pl-0 md:pl-8">
                         <div class="w-full max-w-[380px] rounded-3xl overflow-hidden shadow-lg border border-gray-100 bg-white flex justify-center">
-                            <img src="assets/gifs/13.webp" alt="Cómo Usar el Producto" class="w-full aspect-square object-cover" onerror="this.src='https://placehold.co/800x800/f8fafc/64748b?text=GIF+COMO+USAR'">
+                            <img src="assets/gifs/13.webp" loading="lazy" alt="Cómo Usar el Producto" class="w-full aspect-square object-cover" onerror="this.src='https://placehold.co/800x800/f8fafc/64748b?text=GIF+COMO+USAR'">
                         </div>
                     </div>
                 </div>
@@ -945,6 +945,14 @@ src="https://www.facebook.com/tr?id=1051864450604425&ev=PageView&noscript=1"
         async function submitCODOrder(event) {
             event.preventDefault();
             
+            // Validaciones de comuna seleccionada
+            const regionSelect = document.getElementById('region');
+            const comunaSelect = document.getElementById('comuna');
+            if (!regionSelect.value || !comunaSelect.value) {
+                alert('Por favor selecciona una comuna válida de la lista de sugerencias.');
+                return;
+            }
+
             // Validaciones de teléfono
             const phone = document.getElementById('codPhone').value;
             if (phone.length < 8 || phone.includes('12345678') || phone.includes('00000000') || /^(\d)\1+$/.test(phone.replace(/\D/g, ''))) {
@@ -1078,10 +1086,13 @@ src="https://www.facebook.com/tr?id=1051864450604425&ev=PageView&noscript=1"
                     <input type="text" id="codApt" required class="w-full bg-white border border-gray-200 rounded-lg px-3 py-2.5 text-sm text-gray-900 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 outline-none transition-colors" placeholder="Ej: 123, Depto 5">
                 </div>
             </div>
-            <div class="grid grid-cols-2 gap-3">
-            <div>
-                <label for="region" class="block text-[10px] font-bold text-gray-700 uppercase tracking-wider mb-1">Región *</label>
-                <select id="region" name="region" required class="w-full bg-white border border-gray-200 rounded-lg px-3 py-2.5 text-sm text-gray-900 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 outline-none transition-colors appearance-none cursor-pointer">
+            <div class="relative">
+                <label for="comunaInput" class="block text-[10px] font-bold text-gray-700 uppercase tracking-wider mb-1">Comuna / Ciudad *</label>
+                <input type="text" id="comunaInput" required autocomplete="off" class="w-full bg-white border border-gray-200 rounded-lg px-3 py-2.5 text-sm text-gray-900 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 outline-none transition-colors" placeholder="Escribe tu comuna (ej: Providencia...)">
+                <div id="comunaSuggestions" class="absolute left-0 right-0 mt-1 max-h-48 overflow-y-auto bg-white border border-gray-200 rounded-lg shadow-lg hidden z-50 text-sm text-gray-950"></div>
+                
+                <!-- Selects originales ocultos para compatibilidad con JS de envío -->
+                <select id="region" name="region" required class="hidden">
                     <option value="">Selecciona</option>
                     <option value="arica">Región de Arica y Parinacota</option>
                     <option value="tarapaca">Región de Tarapacá</option>
@@ -1097,14 +1108,10 @@ src="https://www.facebook.com/tr?id=1051864450604425&ev=PageView&noscript=1"
                     <option value="losrios">Región de Los Ríos</option>
                     <option value="loslagos">Región de Los Lagos</option>
                 </select>
-            </div>
-            <div>
-                <label for="comuna" class="block text-[10px] font-bold text-gray-700 uppercase tracking-wider mb-1">Comuna *</label>
-                <select id="comuna" name="comuna" required disabled class="w-full bg-white border border-gray-200 rounded-lg px-3 py-2.5 text-sm text-gray-900 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 outline-none transition-colors appearance-none cursor-pointer disabled:opacity-50 disabled:bg-gray-50 disabled:cursor-not-allowed">
+                <select id="comuna" name="comuna" required class="hidden">
                     <option value="">Selecciona</option>
                 </select>
             </div>
-        </div>
             <div class="mt-4">
               <label class="block text-[10px] font-bold text-gray-700 uppercase tracking-wider mb-1.5">Método de Pago</label>
               <div class="border-2 border-indigo-600 bg-indigo-50/30 rounded-lg p-3">
@@ -1174,8 +1181,39 @@ src="https://www.facebook.com/tr?id=1051864450604425&ev=PageView&noscript=1"
     "loslagos": ["Puerto Montt", "Calbuco", "Cochamó", "Fresia", "Frutillar", "Los Muermos", "Llanquihue", "Maullín", "Puerto Varas", "Castro", "Ancud", "Chonchi", "Curaco de Vélez", "Dalcahue", "Puqueldón", "Queilén", "Quellón", "Quemchi", "Quinchao", "Osorno", "Puerto Octay", "Purranque", "Puyehue", "Río Negro", "San Juan de la Costa", "San Pablo", "Chaitén", "Futaleufú", "Hualaihué", "Palena"]
 };
 
+  const regionNombres = {
+    "arica": "Región de Arica y Parinacota",
+    "tarapaca": "Región de Tarapacá",
+    "antofagasta": "Región de Antofagasta",
+    "coquimbo": "Región de Coquimbo",
+    "valparaiso": "Región de Valparaíso",
+    "metropolitana": "Región Metropolitana",
+    "ohiggins": "Región de O'Higgins",
+    "maule": "Región del Maule",
+    "nuble": "Región de Ñuble",
+    "biobio": "Región del Bío-Bío",
+    "araucania": "Región de La Araucanía",
+    "losrios": "Región de Los Ríos",
+    "loslagos": "Región de Los Lagos"
+  };
+
   const regionSelect = document.getElementById('region');
   const comunaSelect = document.getElementById('comuna');
+  const comunaInput = document.getElementById('comunaInput');
+  const comunaSuggestions = document.getElementById('comunaSuggestions');
+
+  // Crear la lista plana de comunas
+  const todasLasComunas = [];
+  for (const [regionKey, comunas] of Object.entries(comunasPorRegion)) {
+    const regionNombre = regionNombres[regionKey] || regionKey;
+    comunas.forEach(comuna => {
+      todasLasComunas.push({
+        comunaName: comuna,
+        regionKey: regionKey,
+        regionNombre: regionNombre
+      });
+    });
+  }
 
   if (regionSelect && comunaSelect) {
       regionSelect.addEventListener('change', function() {
@@ -1192,6 +1230,59 @@ src="https://www.facebook.com/tr?id=1051864450604425&ev=PageView&noscript=1"
         } else {
           comunaSelect.disabled = true;
         }
+      });
+  }
+
+  // Lógica de Autocompletado Inteligente
+  if (comunaInput && comunaSuggestions) {
+      comunaInput.addEventListener('input', function() {
+          const valor = this.value.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+          comunaSuggestions.innerHTML = '';
+          
+          if (valor.length < 2) {
+              comunaSuggestions.classList.add('hidden');
+              return;
+          }
+          
+          const coincidencias = todasLasComunas.filter(item => 
+              item.comunaName.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").includes(valor)
+          ).slice(0, 5); // Mostrar máximo 5
+          
+          if (coincidencias.length > 0) {
+              coincidencias.forEach(item => {
+                  const div = document.createElement('div');
+                  div.className = 'px-4 py-2.5 hover:bg-emerald-50 cursor-pointer transition-colors border-b border-gray-100 last:border-b-0 text-gray-900 font-medium';
+                  div.innerHTML = `<span class="text-emerald-700 font-bold">${item.comunaName}</span> <span class="text-gray-500 text-xs font-normal">(${item.regionNombre})</span>`;
+                  div.addEventListener('click', function() {
+                      comunaInput.value = `${item.comunaName} (${item.regionNombre})`;
+                      
+                      // Actualizar los selects ocultos
+                      regionSelect.value = item.regionKey;
+                      regionSelect.dispatchEvent(new Event('change'));
+                      comunaSelect.value = item.comunaName;
+                      
+                      comunaSuggestions.classList.add('hidden');
+                  });
+                  comunaSuggestions.appendChild(div);
+              });
+              comunaSuggestions.classList.remove('hidden');
+          } else {
+              comunaSuggestions.classList.add('hidden');
+          }
+      });
+
+      // Ocultar al hacer clic afuera
+      document.addEventListener('click', function(e) {
+          if (e.target !== comunaInput && e.target !== comunaSuggestions) {
+              comunaSuggestions.classList.add('hidden');
+          }
+      });
+
+      // Mostrar al enfocar si tiene texto
+      comunaInput.addEventListener('focus', function() {
+          if (this.value.length >= 2) {
+              comunaInput.dispatchEvent(new Event('input'));
+          }
       });
   }
 
