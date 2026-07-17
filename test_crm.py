@@ -16,13 +16,26 @@ sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 from database import init_db, save_order, get_pending_order_by_phone, get_all_orders, update_order_status, is_postgres
 from agents.crm import process_incoming_reply, send_order_confirmation_request
 
-# Limpiar BD anterior para pruebas limpias (solo si no es Postgres)
-if not is_postgres() and os.path.exists("orders.db"):
+# Limpiar BD anterior para pruebas limpias
+if not is_postgres():
+    if os.path.exists("orders.db"):
+        try:
+            os.remove("orders.db")
+            logger.info("🗑️ Base de datos orders.db anterior eliminada para testing.")
+        except Exception as e:
+            logger.warning(f"⚠️ No se pudo eliminar orders.db: {e}")
+else:
+    # Si es Postgres, eliminar registros de pruebas anteriores para evitar colisiones
+    from database import get_db_connection
     try:
-        os.remove("orders.db")
-        logger.info("🗑️ Base de datos orders.db anterior eliminada para testing.")
+        with get_db_connection() as conn:
+            with conn.cursor() as cur:
+                cur.execute("DELETE FROM orders WHERE phone IN ('56987654321', '56999999999') OR dropi_order_id LIKE 'TEST-ORDER-%' OR dropi_order_id LIKE 'SIM-COD-%'")
+            conn.commit()
+        logger.info("🗑️ Registros de prueba anteriores eliminados de PostgreSQL.")
     except Exception as e:
-        logger.warning(f"⚠️ No se pudo eliminar orders.db: {e}")
+        logger.warning(f"⚠️ No se pudieron limpiar registros de prueba en PostgreSQL: {e}")
+
 
 
 async def run_tests():

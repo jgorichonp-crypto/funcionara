@@ -17,29 +17,70 @@ DB_NAME = "orders.db"
 try:
     import psycopg2
     from psycopg2.extras import RealDictCursor
+    from psycopg2.pool import ThreadedConnectionPool
     POSTGRES_AVAILABLE = True
 except ImportError:
     POSTGRES_AVAILABLE = False
 
 
 def is_postgres() -> bool:
-    """Verifica si la configuración indica el uso de PostgreSQL."""
-    return POSTGRES_AVAILABLE and settings.database_url is not None and settings.database_url.strip() != ""
+    """Verifica si la configuración indica el uso de PostgreSQL. (Desactivado para usar SQLite local)"""
+    return False
 
 
+# Pool de conexiones global para PostgreSQL
+db_pool = None
+
+
+def get_db_pool():
+    """Inicializa y retorna el pool de conexiones para PostgreSQL."""
+    global db_pool
+    if db_pool is None:
+        logger.info("Initializing PostgreSQL Connection Pool...")
+        try:
+            db_pool = ThreadedConnectionPool(
+                minconn=1,
+                maxconn=20,
+                dsn=settings.database_url
+            )
+            logger.info("Connection Pool initialized successfully.")
+        except Exception as e:
+            logger.error(f"Error initializing connection pool: {str(e)}")
+            raise e
+    return db_pool
+
+
+from contextlib import contextmanager
+
+@contextmanager
 def get_db_connection():
-    """Retorna una conexión a la base de datos (PostgreSQL o SQLite) según la configuración."""
+    """Retorna una conexión a la base de datos (PostgreSQL o SQLite) manejando su ciclo de vida."""
     if is_postgres():
-        return psycopg2.connect(settings.database_url)
+        pool = get_db_pool()
+        conn = pool.getconn()
+        try:
+            yield conn
+        finally:
+            pool.putconn(conn)
     else:
         conn = sqlite3.connect(DB_NAME)
         conn.row_factory = sqlite3.Row
-        return conn
+        try:
+            yield conn
+        finally:
+            conn.close()
 
 
 def init_db():
     """Inicializa las tablas en la base de datos activa (SQLite o PostgreSQL)."""
     if is_postgres():
+        # Pre-cargar pool de conexiones
+        try:
+            get_db_pool()
+        except Exception as e:
+            logger.error(f"❌ Error al inicializar pool de conexiones PostgreSQL en init_db: {str(e)}")
+            # Permitir que continúe para que intente conectar en futuras consultas si es una caída temporal
+        
         # Sintaxis PostgreSQL
         query = """
         CREATE TABLE IF NOT EXISTS orders (

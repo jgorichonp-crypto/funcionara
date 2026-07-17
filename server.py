@@ -418,9 +418,10 @@ async def create_order(order: OrderRequest, background_tasks: BackgroundTasks):
     product_name = order.product_name if order.product_name else (settings.dropi_product_name or "Producto de Tienda")
     product_price = order.product_price if order.product_price else (settings.dropi_product_price or 19990.0)
     
-    # 1. Guardar en la base de datos local
+    # 1. Guardar en la base de datos local (En segundo plano)
     from database import save_order
-    save_order(
+    background_tasks.add_task(
+        save_order,
         dropi_order_id=temp_id,
         client_name=order.name,
         phone=order.phone,
@@ -430,33 +431,33 @@ async def create_order(order: OrderRequest, background_tasks: BackgroundTasks):
         price=product_price,
         status="PENDING_CONFIRMATION"
     )
+
     
-    # 2. Guardar en Google Sheets vía Apps Script (Ejecución directa para Serverless/Vercel)
+    # 2. Guardar en Google Sheets vía Apps Script (En segundo plano)
     from utils.sheets_helper import save_order_to_sheets
-    try:
-        save_order_to_sheets(
-            order_id=temp_id,
-            client_name=order.name,
-            phone=order.phone,
-            address=order.address,
-            city=order.city,
-            product_name=f"{product_name} ({p_id})",
-            price=product_price,
-            rut=order.rut or "",
-            email=order.email or "",
-            calle=order.calle or "",
-            n_casa=order.n_casa or "",
-            region=order.region or "",
-            comuna=order.comuna or "",
-            unidades=order.unidades or 1
-        )
-    except Exception as e:
-        logger.error(f"❌ Error al guardar en Google Sheets: {e}")
+    background_tasks.add_task(
+        save_order_to_sheets,
+        order_id=temp_id,
+        client_name=order.name,
+        phone=order.phone,
+        address=order.address,
+        city=order.city,
+        product_name=f"{product_name} ({p_id})",
+        price=product_price,
+        rut=order.rut or "",
+        email=order.email or "",
+        calle=order.calle or "",
+        n_casa=order.n_casa or "",
+        region=order.region or "",
+        comuna=order.comuna or "",
+        unidades=order.unidades or 1
+    )
     
-    # 3. Enviar confirmación por WhatsApp (Ejecución directa para Serverless/Vercel)
+    # 3. Enviar confirmación por WhatsApp (En segundo plano)
     from agents.crm import send_order_confirmation_request
-    try:
-        await send_order_confirmation_request({
+    background_tasks.add_task(
+        send_order_confirmation_request,
+        {
             "client_name": order.name,
             "phone": order.phone,
             "product_name": product_name,
@@ -464,9 +465,8 @@ async def create_order(order: OrderRequest, background_tasks: BackgroundTasks):
             "address": order.address,
             "city": order.city,
             "dropi_order_id": temp_id
-        })
-    except Exception as e:
-        logger.error(f"❌ Error al enviar confirmación de WhatsApp: {e}")
+        }
+    )
     
     return {
         "status": "success",
