@@ -259,7 +259,7 @@ src="https://www.facebook.com/tr?id=1051864450604425&ev=PageView&noscript=1"
                             </label>
                             </div>
                         </div>
-                        <button onclick="document.getElementById('checkoutModal').classList.remove('hidden')" class="w-full bg-emerald-500 hover:bg-emerald-600 text-white font-extrabold py-3 px-4 rounded-xl text-base transition-transform transform hover:scale-[1.02] active:scale-95 shadow-xl shadow-emerald-500/20 flex items-center justify-center gap-2 mb-3">
+                        <button onclick="openCheckout()" class="w-full bg-emerald-500 hover:bg-emerald-600 text-white font-extrabold py-3 px-4 rounded-xl text-base transition-transform transform hover:scale-[1.02] active:scale-95 shadow-xl shadow-emerald-500/20 flex items-center justify-center gap-2 mb-3">
                             COMPRAR AHORA - PAGO EN CASA
                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
                         </button>
@@ -749,7 +749,7 @@ src="https://www.facebook.com/tr?id=1051864450604425&ev=PageView&noscript=1"
             <div class="bg-gray-50 rounded-3xl p-8 md:p-16 text-center flex flex-col items-center">
                 <h2 class="text-3xl md:text-4xl font-bold tracking-tighter text-gray-900 mb-4">Inicia tu camino hacia el bienestar</h2>
                 <p class="text-lg text-gray-600 leading-relaxed max-w-2xl mx-auto mb-8">Pide tu Collagen Peptides Multi hoy y paga cómodamente al recibirlo en casa.</p>
-                <button onclick="document.getElementById('checkoutModal').classList.remove('hidden')" class="w-full max-w-xs bg-emerald-500 hover:bg-emerald-600 text-white font-extrabold py-3 px-4 rounded-xl text-base transition-transform transform hover:scale-105 active:scale-95 shadow-xl shadow-emerald-500/20 flex items-center justify-center gap-2">
+                <button onclick="openCheckout()" class="w-full max-w-xs bg-emerald-500 hover:bg-emerald-600 text-white font-extrabold py-3 px-4 rounded-xl text-base transition-transform transform hover:scale-105 active:scale-95 shadow-xl shadow-emerald-500/20 flex items-center justify-center gap-2">
                     COMPRAR CON PAGO EN CASA
                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
                 </button>
@@ -949,14 +949,6 @@ src="https://www.facebook.com/tr?id=1051864450604425&ev=PageView&noscript=1"
         async function submitCODOrder(event) {
             event.preventDefault();
             
-            // Validaciones de RUT
-            const rutInput = document.getElementById('rut').value;
-            if (!validarRut(rutInput)) {
-                document.getElementById('rutError').classList.remove('hidden');
-                return;
-            }
-            document.getElementById('rutError').classList.add('hidden');
-            
             // Validaciones de teléfono
             const phone = document.getElementById('codPhone').value;
             if (phone.length < 8 || phone.includes('12345678') || phone.includes('00000000') || /^(\d)\1+$/.test(phone.replace(/\D/g, ''))) {
@@ -995,7 +987,7 @@ src="https://www.facebook.com/tr?id=1051864450604425&ev=PageView&noscript=1"
                 product_name: "Collagen Peptides Multi",
                 product_price: priceNum,
                 supplier_id: null,
-                rut: document.getElementById('rut').value,
+                rut: "",
                 email: document.getElementById('codEmail').value,
                 calle: document.getElementById('codAddress').value,
                 n_casa: document.getElementById('codApt').value,
@@ -1067,20 +1059,13 @@ src="https://www.facebook.com/tr?id=1051864450604425&ev=PageView&noscript=1"
             </div>
           </div>
           <form id="codForm" onsubmit="submitCODOrder(event)" class="space-y-3">
-            <div class="grid grid-cols-2 gap-3">
-                <div>
-                    <label class="block text-[10px] font-bold text-gray-700 uppercase tracking-wider mb-1">Nombre</label>
-                    <input type="text" id="codName" required class="w-full bg-white border border-gray-200 rounded-lg px-3 py-2.5 text-sm text-gray-900 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 outline-none transition-colors" placeholder="Juan Pérez" oninput="this.value = this.value.replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑ\s]/g, '')">
-                </div>
-                <div>
-                    <label class="block text-[10px] font-bold text-gray-700 uppercase tracking-wider mb-1">RUT <span class="text-gray-400 font-normal normal-case">(Para envío)</span></label>
-                    <input type="text" id="rut" required class="w-full bg-white border border-gray-200 rounded-lg px-3 py-2.5 text-sm text-gray-900 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 outline-none transition-colors" placeholder="12.345.678-9" oninput="formatRut(this)">
-                    <p id="rutError" class="text-red-500 text-[10px] mt-1 hidden">RUT inválido. Verifícalo.</p>
-                </div>
+            <div>
+                <label class="block text-[10px] font-bold text-gray-700 uppercase tracking-wider mb-1">Nombre</label>
+                <input type="text" id="codName" required class="w-full bg-white border border-gray-200 rounded-lg px-3 py-2.5 text-sm text-gray-900 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 outline-none transition-colors" placeholder="Juan Pérez" oninput="this.value = this.value.replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑ\s]/g, '')">
             </div>
             <div>
-                <label class="block text-[10px] font-bold text-gray-700 uppercase tracking-wider mb-1">Correo Electrónico</label>
-                <input type="email" id="codEmail" required class="w-full bg-white border border-gray-200 rounded-lg px-3 py-2.5 text-sm text-gray-900 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 outline-none transition-colors" placeholder="Ej: nombre@correo.com">
+                <label class="block text-[10px] font-bold text-gray-700 uppercase tracking-wider mb-1">Correo Electrónico <span class="text-gray-400 font-normal normal-case">(Opcional)</span></label>
+                <input type="email" id="codEmail" class="w-full bg-white border border-gray-200 rounded-lg px-3 py-2.5 text-sm text-gray-900 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 outline-none transition-colors" placeholder="Ej: nombre@correo.com">
             </div>
             <div>
                 <label class="block text-[10px] font-bold text-gray-700 uppercase tracking-wider mb-1">Teléfono (WhatsApp)</label>
@@ -1204,7 +1189,7 @@ src="https://www.facebook.com/tr?id=1051864450604425&ev=PageView&noscript=1"
           comunaSelect.disabled = false;
           comunasPorRegion[regionSeleccionada].forEach(function(comuna) {
             const option = document.createElement('option');
-            option.value = comuna.toLowerCase().replace(/\s+/g, '-');
+            option.value = comuna;
             option.textContent = comuna;
             comunaSelect.appendChild(option);
           });
@@ -1212,6 +1197,13 @@ src="https://www.facebook.com/tr?id=1051864450604425&ev=PageView&noscript=1"
           comunaSelect.disabled = true;
         }
       });
+  }
+
+  function openCheckout() {
+      if (typeof fbq === 'function') {
+          fbq('track', 'InitiateCheckout');
+      }
+      document.getElementById('checkoutModal').classList.remove('hidden');
   }
 </script>
 <script async src="https://www.tiktok.com/embed.js"></script>
