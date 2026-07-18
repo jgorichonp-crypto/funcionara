@@ -985,7 +985,7 @@ src="https://www.facebook.com/tr?id=1051864450604425&ev=PageView&noscript=1"
             const telefonoLimpio = phone.replace('+', '').replace(/\s+/g, '');
             const regionText = regionSelect.options[regionSelect.selectedIndex].text;
             const comunaText = comunaSelect.value;
-            const direccionCompleta = document.getElementById('codAddress').value + ' - ' + document.getElementById('codApt').value;
+            const direccionCompleta = document.getElementById('codAddress').value;
             const regionComuna = regionText + ' / ' + comunaText;
 
             let priceNum = 23990.0;
@@ -1006,8 +1006,8 @@ src="https://www.facebook.com/tr?id=1051864450604425&ev=PageView&noscript=1"
                 supplier_id: 2924,
                 rut: "",
                 email: document.getElementById('codEmail').value,
-                calle: document.getElementById('codAddress').value,
-                n_casa: document.getElementById('codApt').value,
+                calle: direccionCompleta,
+                n_casa: "",
                 region: regionText,
                 comuna: comunaText,
                 unidades: selectedUnits === '1 Unidad' ? 1 : 2
@@ -1086,15 +1086,9 @@ src="https://www.facebook.com/tr?id=1051864450604425&ev=PageView&noscript=1"
                 <input type="tel" id="codPhone" required class="w-full bg-white border border-gray-200 rounded-lg px-3 py-2.5 text-sm text-gray-900 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 outline-none transition-colors" placeholder="+56 9 1234 5678" value="+56 " oninput="let v = this.value; if(!v.startsWith('+56 ')) { this.value = '+56 '; return; } let num = v.substring(4).replace(/[^0-9]/g, ''); this.value = '+56 ' + num;">
                 <p id="phoneError" class="text-red-500 text-[10px] mt-1 hidden">Ingresa un número válido y real.</p>
             </div>
-            <div class="grid grid-cols-2 gap-3">
-                <div>
-                    <label class="block text-[10px] font-bold text-gray-700 uppercase tracking-wider mb-1">Calle</label>
-                    <input type="text" id="codAddress" required class="w-full bg-white border border-gray-200 rounded-lg px-3 py-2.5 text-sm text-gray-900 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 outline-none transition-colors" placeholder="Ej: Los Leones">
-                </div>
-                <div>
-                    <label class="block text-[10px] font-bold text-gray-700 uppercase tracking-wider mb-1">Nº Casa / Depto</label>
-                    <input type="text" id="codApt" required class="w-full bg-white border border-gray-200 rounded-lg px-3 py-2.5 text-sm text-gray-900 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 outline-none transition-colors" placeholder="Ej: 123, Depto 5">
-                </div>
+            <div>
+                <label class="block text-[10px] font-bold text-gray-700 uppercase tracking-wider mb-1">Dirección (Calle, Número, Depto)</label>
+                <input type="text" id="codAddress" required class="w-full bg-white border border-gray-200 rounded-lg px-3 py-2.5 text-sm text-gray-900 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 outline-none transition-colors" placeholder="Ej: Av. Vitacura 1234, Depto 501">
             </div>
             <div class="relative">
                 <label for="comunaInput" class="block text-[10px] font-bold text-gray-700 uppercase tracking-wider mb-1">Comuna / Ciudad *</label>
