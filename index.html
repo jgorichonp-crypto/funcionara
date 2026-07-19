@@ -468,16 +468,6 @@ Apple/Linear Similarity: 9/10
                                 </button>
                             </form>
 
-                            <!-- Paga Anticipado Black Box (Screenshot 3) -->
-                            <div class="bg-black text-white p-4 rounded-2xl mt-4 text-center select-none shadow-md">
-                                <div class="flex items-center justify-center gap-3 mb-1">
-                                    <svg class="w-5 h-5 text-white shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
-                                    </svg>
-                                    <span class="text-[13px] font-black tracking-wide">PAGA ANTICIPADO Y AHORRA 10% = <span id="prepay-price-display">$29.691</span></span>
-                                </div>
-                                <p class="text-[9.5px] text-gray-300 font-bold">+465 Clientes Aprovecharon esta Oferta</p>
-                            </div>
 
                             <!-- Trust Badges (Gold Theme) (Screenshot 3) -->
                             <div class="grid grid-cols-3 gap-2 mt-6">
@@ -1761,12 +1751,6 @@ Apple/Linear Similarity: 9/10
                 btnPrice.innerText = selectedPrice;
             }
             
-            // Update Prepay Trust Box
-            const prepayTotal = Math.round(totalVal * 0.9);
-            const prepaySpan = document.getElementById('prepay-price-display');
-            if (prepaySpan) {
-                prepaySpan.innerText = '$' + prepayTotal.toLocaleString('es-CL');
-            }
 
 
 
