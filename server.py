@@ -193,12 +193,8 @@ def login_to_dropi() -> Optional[str]:
     Autentica con la API de Dropi Chile usando curl_cffi para evadir el bloqueo TLS/WAF.
     Almacena el token de usuario en la variable global dropi_session.
     """
-    email = settings.dropi_email
-    password = settings.dropi_password
-    
-    if not email or not password or "placeholder" in email.lower() or "placeholder" in password.lower():
-        logger.warning("🧪 No hay credenciales de Dropi configuradas o son placeholders. Operando en modo simulación.")
-        return None
+    logger.info("🧪 [MODO SIMULACIÓN FORZADO] Conexión a Dropi deshabilitada. Operando en modo simulación.")
+    return None
         
     payload = {
         "email": email,
