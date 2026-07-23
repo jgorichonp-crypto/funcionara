@@ -1294,7 +1294,7 @@ Apple/Linear Similarity: 9/10
                 </div>
 
                 <!-- Individual Reviews -->
-                <div class="space-y-6 text-left">
+                <div id="reviews-list-container" class="space-y-6 text-left">
                     <!-- Review 1 -->
                     <div class="border-b border-gray-100 pb-6 last:border-b-0">
                         <div class="flex items-center gap-1.5 mb-1.5">
@@ -2493,6 +2493,138 @@ Apple/Linear Similarity: 9/10
             <img id="lightboxImage" src="" class="max-w-full max-h-[85vh] rounded-lg object-contain shadow-2xl" onclick="event.stopPropagation()" loading="lazy" decoding="async">
         </div>
     </div>
+
+<!-- Write Review Modal -->
+<div id="writeReviewModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+    <div class="bg-white rounded-3xl p-6 md:p-8 max-w-md w-full shadow-2xl border border-gray-100 relative animate-fade-in">
+        <button type="button" onclick="closeWriteReviewModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 p-1.5 rounded-full hover:bg-gray-100 transition-colors">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+        </button>
+        <h3 class="text-xl font-bold text-gray-900 mb-1 text-left">Escribir una reseña</h3>
+        <p class="text-xs text-gray-500 mb-5 text-left">Comparte tu experiencia con otros compradores</p>
+        
+        <form id="writeReviewForm" onsubmit="submitReview(event)">
+            <div class="mb-4 text-left">
+                <label class="block text-xs font-bold text-gray-700 mb-1">Tu Nombre</label>
+                <input type="text" id="review-author" required placeholder="Ej: María González" class="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 transition-all">
+            </div>
+            
+            <div class="mb-4 text-left">
+                <label class="block text-xs font-bold text-gray-700 mb-1">Calificación</label>
+                <div class="flex items-center gap-1.5 text-2xl text-amber-400 cursor-pointer select-none" id="review-stars">
+                    <span onclick="setRating(1)" class="star-item hover:scale-110 transition-transform">★</span>
+                    <span onclick="setRating(2)" class="star-item hover:scale-110 transition-transform">★</span>
+                    <span onclick="setRating(3)" class="star-item hover:scale-110 transition-transform">★</span>
+                    <span onclick="setRating(4)" class="star-item hover:scale-110 transition-transform">★</span>
+                    <span onclick="setRating(5)" class="star-item hover:scale-110 transition-transform">★</span>
+                </div>
+            </div>
+            
+            <div class="mb-5 text-left">
+                <label class="block text-xs font-bold text-gray-700 mb-1">Tu Reseña</label>
+                <textarea id="review-comment" required rows="3" placeholder="Cuéntanos qué te pareció el producto..." class="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 transition-all"></textarea>
+            </div>
+            
+            <button type="submit" class="w-full py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm rounded-xl shadow-lg shadow-emerald-600/20 transition-all transform active:scale-95">
+                Enviar reseña
+            </button>
+        </form>
+    </div>
+</div>
+
+<!-- Review Success Popup Modal -->
+<div id="reviewSuccessModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+    <div class="bg-white rounded-3xl p-6 md:p-8 max-w-sm w-full shadow-2xl text-center border border-gray-100 animate-fade-in">
+        <div class="w-16 h-16 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto mb-4 shadow-sm">
+            <svg class="w-8 h-8" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path>
+            </svg>
+        </div>
+        <h3 class="text-lg font-extrabold text-gray-900 mb-2">¡Reseña Enviada!</h3>
+        <p class="text-sm text-gray-600 leading-relaxed mb-6 font-medium">Tu reseña fue enviada, ¡gracias por tus comentarios!</p>
+        <button type="button" onclick="closeReviewSuccessModal()" class="w-full py-3 bg-gray-900 hover:bg-black text-white font-bold text-sm rounded-xl shadow-md transition-all active:scale-95">
+            Aceptar
+        </button>
+    </div>
+</div>
+
+<script>
+let currentRating = 5;
+
+function openWriteReviewModal() {
+    document.getElementById('writeReviewModal').classList.remove('hidden');
+}
+
+function closeWriteReviewModal() {
+    document.getElementById('writeReviewModal').classList.add('hidden');
+}
+
+function openReviewLightbox(imgSrc) {
+    const lightboxImg = document.getElementById('lightboxImage');
+    if (lightboxImg) lightboxImg.src = imgSrc;
+    const lightbox = document.getElementById('reviewLightbox');
+    if (lightbox) lightbox.classList.remove('hidden');
+}
+
+function closeReviewLightbox() {
+    const lightbox = document.getElementById('reviewLightbox');
+    if (lightbox) lightbox.classList.add('hidden');
+}
+
+function setRating(val) {
+    currentRating = val;
+    const stars = document.querySelectorAll('#review-stars .star-item');
+    stars.forEach((star, index) => {
+        if (index < val) {
+            star.classList.remove('text-gray-300');
+            star.classList.add('text-amber-400');
+        } else {
+            star.classList.remove('text-amber-400');
+            star.classList.add('text-gray-300');
+        }
+    });
+}
+
+function submitReview(e) {
+    e.preventDefault();
+    const author = document.getElementById('review-author').value.trim();
+    const comment = document.getElementById('review-comment').value.trim();
+    
+    if (!author || !comment) return;
+    
+    const reviewList = document.getElementById('reviews-list-container');
+    if (reviewList) {
+        let starsHtml = '★'.repeat(currentRating) + '☆'.repeat(5 - currentRating);
+        const newReviewHtml = `
+            <div class="bg-white p-4 rounded-xl border border-gray-100 shadow-sm flex flex-col justify-between animate-fade-in mb-3">
+                <div>
+                    <div class="flex items-center gap-1 mb-1">
+                        <span class="text-amber-400 text-sm font-bold">${starsHtml}</span>
+                    </div>
+                    <div class="flex items-center gap-1.5 text-[11px] text-gray-500 mb-2">
+                        <span class="font-medium text-gray-700">${author}</span>
+                        <span>•</span>
+                        <span class="text-emerald-600 font-semibold flex items-center gap-0.5">
+                            <svg class="w-3 h-3 fill-current" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+                            Compra verificada
+                        </span>
+                    </div>
+                    <p class="text-xs text-gray-600 leading-relaxed">${comment}</p>
+                </div>
+            </div>`;
+        reviewList.insertAdjacentHTML('afterbegin', newReviewHtml);
+    }
+    
+    document.getElementById('writeReviewForm').reset();
+    setRating(5);
+    closeWriteReviewModal();
+    document.getElementById('reviewSuccessModal').classList.remove('hidden');
+}
+
+function closeReviewSuccessModal() {
+    document.getElementById('reviewSuccessModal').classList.add('hidden');
+}
+</script>
 </body>
 
 </html>
