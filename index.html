@@ -1704,6 +1704,24 @@ Apple/Linear Similarity: 9/10
         let expressPrice = 1990;
         let useExpress = false;
 
+        let currentPaymentMethod = 'cod';
+        function selectPaymentMethod(method) {
+            currentPaymentMethod = method;
+            const btnCod = document.getElementById('btn-method-cod');
+            const btnOnline = document.getElementById('btn-method-online');
+            const submitBtn = document.querySelector('#codForm button[type="submit"]');
+
+            if (method === 'cod') {
+                if (btnCod) btnCod.className = 'border-2 border-emerald-500 bg-emerald-50/60 p-3 rounded-2xl text-left flex flex-col justify-between transition-all shadow-sm';
+                if (btnOnline) btnOnline.className = 'border border-gray-200 bg-white p-3 rounded-2xl text-left flex flex-col justify-between transition-all hover:border-emerald-300 shadow-sm';
+                if (submitBtn) submitBtn.innerText = 'PÍDELO AHORA Y PAGA EN CASA';
+            } else {
+                if (btnOnline) btnOnline.className = 'border-2 border-emerald-500 bg-emerald-50/60 p-3 rounded-2xl text-left flex flex-col justify-between transition-all shadow-sm';
+                if (btnCod) btnCod.className = 'border border-gray-200 bg-white p-3 rounded-2xl text-left flex flex-col justify-between transition-all hover:border-emerald-300 shadow-sm';
+                if (submitBtn) submitBtn.innerText = 'PAGAR CON KHIPU / TRANSFERENCIA 💳';
+            }
+        }
+
         function selectPromo(units, priceNum) {
             basePrice = priceNum;
             const label1 = document.getElementById('label-promo-1');
