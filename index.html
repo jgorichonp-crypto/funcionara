@@ -216,55 +216,96 @@ Apple/Linear Similarity: 9/10
         <!-- 1. Hero Section -->
         <section class="container mx-auto px-6 pt-6 pb-2 md:pt-12 md:pb-4">
             <div class="grid md:grid-cols-2 lg:grid-cols-12 gap-8 lg:gap-12 items-start max-w-6xl mx-auto">
-                <div
-                    class="lg:col-span-6 flex flex-col-reverse md:flex-row gap-4 w-full max-w-[500px] mx-auto lg:ml-auto lg:mr-0 min-w-0 lg:sticky lg:top-24">
-                                        <!-- Thumbnails -->
+                <div class="lg:col-span-6 flex flex-col-reverse md:flex-row gap-4 w-full max-w-[500px] mx-auto lg:ml-auto lg:mr-0 min-w-0 lg:sticky lg:top-24">
+                    <!-- Thumbnails (3rd item is Video) -->
                     <div id="thumbnail-container" class="flex flex-row md:flex-col gap-3 shrink-0 md:w-20 justify-start overflow-x-auto md:overflow-x-visible pb-2 md:pb-0 w-full md:w-auto">
-                        <button onclick="changeProductImage(this, 'assets/fotos producto/1.webp')" 
+                        <button onclick="changeProductImage(this, 'assets/fotos producto/1.png', 0)" 
                             class="w-12 h-12 md:w-16 md:h-16 shrink-0 aspect-square bg-gray-50 rounded-xl border-2 border-indigo-500 focus:outline-none transition-all hover:bg-gray-100 overflow-hidden shadow-sm">
-                            <img src="assets/fotos producto/1.webp" class="w-full h-full object-contain" loading="lazy" decoding="async">
+                            <img src="assets/fotos producto/1.png" class="w-full h-full object-contain">
                         </button>
-                        <button onclick="changeProductImage(this, 'assets/fotos producto/2.webp')" 
-                            class="w-12 h-12 md:w-16 md:h-16 shrink-0 aspect-square bg-gray-50 rounded-xl border-2 border-transparent focus:border-indigo-500 focus:outline-none transition-all hover:bg-gray-100 overflow-hidden shadow-sm border border-gray-100">
-                            <img src="assets/fotos producto/2.webp" class="w-full h-full object-contain" loading="lazy" decoding="async">
+                        <button onclick="changeProductImage(this, 'assets/fotos producto/2.jpg', 1)" 
+                            class="w-12 h-12 md:w-16 md:h-16 shrink-0 aspect-square bg-gray-50 rounded-xl border-2 border-transparent focus:border-indigo-500 border-gray-100 focus:outline-none transition-all hover:bg-gray-100 overflow-hidden shadow-sm">
+                            <img src="assets/fotos producto/2.jpg" class="w-full h-full object-contain">
                         </button>
-                        <button onclick="changeProductImage(this, 'assets/fotos producto/3.webp')" 
-                            class="w-12 h-12 md:w-16 md:h-16 shrink-0 aspect-square bg-gray-50 rounded-xl border-2 border-transparent focus:border-indigo-500 focus:outline-none transition-all hover:bg-gray-100 overflow-hidden shadow-sm border border-gray-100">
-                            <img src="assets/fotos producto/3.webp" class="w-full h-full object-contain" loading="lazy" decoding="async">
+                        <button onclick="changeProductImage(this, 'assets/fotos producto/3.mp4', 2)" 
+                            class="w-12 h-12 md:w-16 md:h-16 shrink-0 aspect-square bg-gray-50 rounded-xl border-2 border-transparent focus:border-indigo-500 border-gray-100 focus:outline-none transition-all hover:bg-black overflow-hidden shadow-sm relative group">
+                            <video src="assets/fotos producto/3.mp4" muted playsinline preload="metadata" class="w-full h-full object-cover pointer-events-none bg-white"></video>
+                            <div class="absolute inset-0 flex items-center justify-center bg-black/30">
+                                <svg class="w-5 h-5 text-white drop-shadow-md" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd"/>
+                                </svg>
+                            </div>
                         </button>
-                        <button onclick="changeProductImage(this, 'assets/fotos producto/4.webp')" 
-                            class="w-12 h-12 md:w-16 md:h-16 shrink-0 aspect-square bg-gray-50 rounded-xl border-2 border-transparent focus:border-indigo-500 focus:outline-none transition-all hover:bg-gray-100 overflow-hidden shadow-sm border border-gray-100">
-                            <img src="assets/fotos producto/4.webp" class="w-full h-full object-contain" loading="lazy" decoding="async">
+                        <button onclick="changeProductImage(this, 'assets/fotos producto/3.png', 3)" 
+                            class="w-12 h-12 md:w-16 md:h-16 shrink-0 aspect-square bg-gray-50 rounded-xl border-2 border-transparent focus:border-indigo-500 border-gray-100 focus:outline-none transition-all hover:bg-gray-100 overflow-hidden shadow-sm">
+                            <img src="assets/fotos producto/3.png" class="w-full h-full object-contain">
+                        </button>
+                        <button onclick="changeProductImage(this, 'assets/fotos producto/4.jpg', 4)" 
+                            class="w-12 h-12 md:w-16 md:h-16 shrink-0 aspect-square bg-gray-50 rounded-xl border-2 border-transparent focus:border-indigo-500 border-gray-100 focus:outline-none transition-all hover:bg-gray-100 overflow-hidden shadow-sm">
+                            <img src="assets/fotos producto/4.jpg" class="w-full h-full object-contain">
+                        </button>
+                        <button onclick="changeProductImage(this, 'assets/fotos producto/5.jpg', 5)" 
+                            class="w-12 h-12 md:w-16 md:h-16 shrink-0 aspect-square bg-gray-50 rounded-xl border-2 border-transparent focus:border-indigo-500 border-gray-100 focus:outline-none transition-all hover:bg-gray-100 overflow-hidden shadow-sm">
+                            <img src="assets/fotos producto/5.jpg" class="w-full h-full object-contain">
+                        </button>
+                        <button onclick="changeProductImage(this, 'assets/fotos producto/6.jpg', 6)" 
+                            class="w-12 h-12 md:w-16 md:h-16 shrink-0 aspect-square bg-gray-50 rounded-xl border-2 border-transparent focus:border-indigo-500 border-gray-100 focus:outline-none transition-all hover:bg-gray-100 overflow-hidden shadow-sm">
+                            <img src="assets/fotos producto/6.jpg" class="w-full h-full object-contain">
                         </button>
                     </div>
-                                                            <!-- Main Image (Swipeable Carousel with peek effect) -->
-                    <div id="product-carousel" class="flex gap-4 overflow-x-auto snap-x snap-mandatory scrollbar-none w-full pb-2 md:pb-0 select-none cursor-grab active:cursor-grabbing px-1">
-                        <div class="w-[88%] md:w-full shrink-0 snap-center aspect-square flex items-center justify-center rounded-2xl overflow-hidden border border-gray-100 bg-white relative group">
-                            <img src="assets/fotos producto/1.webp" class="w-full h-full object-contain pointer-events-none" fetchpriority="high" loading="eager" decoding="async">
+                    <!-- Main Carousel (Optimized muted video + images) -->
+                    <div id="product-carousel" class="flex gap-4 overflow-x-auto snap-x snap-mandatory scrollbar-none w-full min-w-0 pb-2 md:pb-0 select-none cursor-grab active:cursor-grabbing px-1">
+                        <div class="w-[88%] md:w-full shrink-0 snap-center aspect-square flex items-center justify-center rounded-2xl overflow-hidden bg-white relative group">
+                            <img src="assets/fotos producto/1.png" class="w-full h-full object-contain pointer-events-none">
                             <div class="absolute top-3 left-3 bg-white/90 backdrop-blur-sm p-1.5 rounded-full shadow-sm">
                                 <svg class="w-4 h-4 text-gray-700" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v6m3-3H7"></path>
                                 </svg>
                             </div>
                         </div>
-                        <div class="w-[88%] md:w-full shrink-0 snap-center aspect-square flex items-center justify-center rounded-2xl overflow-hidden border border-gray-100 bg-white relative group">
-                            <img src="assets/fotos producto/2.webp" class="w-full h-full object-contain pointer-events-none" loading="lazy" decoding="async">
+                        <div class="w-[88%] md:w-full shrink-0 snap-center aspect-square flex items-center justify-center rounded-2xl overflow-hidden bg-white relative group">
+                            <img src="assets/fotos producto/2.jpg" class="w-full h-full object-contain pointer-events-none">
                             <div class="absolute top-3 left-3 bg-white/90 backdrop-blur-sm p-1.5 rounded-full shadow-sm">
                                 <svg class="w-4 h-4 text-gray-700" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v6m3-3H7"></path>
                                 </svg>
                             </div>
                         </div>
-                        <div class="w-[88%] md:w-full shrink-0 snap-center aspect-square flex items-center justify-center rounded-2xl overflow-hidden border border-gray-100 bg-white relative group">
-                            <img src="assets/fotos producto/3.webp" class="w-full h-full object-contain pointer-events-none" loading="lazy" decoding="async">
+                        <div class="w-[88%] md:w-full shrink-0 snap-center aspect-square flex items-center justify-center rounded-2xl overflow-hidden bg-white relative group">
+                            <video src="assets/fotos producto/3.mp4" autoplay loop muted playsinline preload="metadata" class="w-full h-full object-contain pointer-events-none bg-white"></video>
+                            <div class="absolute top-3 left-3 bg-white/90 backdrop-blur-sm px-2.5 py-1 rounded-full text-gray-700 text-[10px] font-bold flex items-center gap-1.5 shadow-sm">
+                                <svg class="w-3.5 h-3.5 text-emerald-600 fill-current" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd"/>
+                                </svg>
+                                VIDEO DEMO
+                            </div>
+                        </div>
+                        <div class="w-[88%] md:w-full shrink-0 snap-center aspect-square flex items-center justify-center rounded-2xl overflow-hidden bg-white relative group">
+                            <img src="assets/fotos producto/3.png" class="w-full h-full object-contain pointer-events-none">
                             <div class="absolute top-3 left-3 bg-white/90 backdrop-blur-sm p-1.5 rounded-full shadow-sm">
                                 <svg class="w-4 h-4 text-gray-700" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v6m3-3H7"></path>
                                 </svg>
                             </div>
                         </div>
-                        <div class="w-[88%] md:w-full shrink-0 snap-center aspect-square flex items-center justify-center rounded-2xl overflow-hidden border border-gray-100 bg-white relative group">
-                            <img src="assets/fotos producto/4.webp" class="w-full h-full object-contain pointer-events-none" loading="lazy" decoding="async">
+                        <div class="w-[88%] md:w-full shrink-0 snap-center aspect-square flex items-center justify-center rounded-2xl overflow-hidden bg-white relative group">
+                            <img src="assets/fotos producto/4.jpg" class="w-full h-full object-contain pointer-events-none">
+                            <div class="absolute top-3 left-3 bg-white/90 backdrop-blur-sm p-1.5 rounded-full shadow-sm">
+                                <svg class="w-4 h-4 text-gray-700" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v6m3-3H7"></path>
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="w-[88%] md:w-full shrink-0 snap-center aspect-square flex items-center justify-center rounded-2xl overflow-hidden bg-white relative group">
+                            <img src="assets/fotos producto/5.jpg" class="w-full h-full object-contain pointer-events-none">
+                            <div class="absolute top-3 left-3 bg-white/90 backdrop-blur-sm p-1.5 rounded-full shadow-sm">
+                                <svg class="w-4 h-4 text-gray-700" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v6m3-3H7"></path>
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="w-[88%] md:w-full shrink-0 snap-center aspect-square flex items-center justify-center rounded-2xl overflow-hidden bg-white relative group">
+                            <img src="assets/fotos producto/6.jpg" class="w-full h-full object-contain pointer-events-none">
                             <div class="absolute top-3 left-3 bg-white/90 backdrop-blur-sm p-1.5 rounded-full shadow-sm">
                                 <svg class="w-4 h-4 text-gray-700" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v6m3-3H7"></path>
@@ -273,6 +314,7 @@ Apple/Linear Similarity: 9/10
                         </div>
                     </div>
                 </div>
+                <!-- Right Column: Product Card & Form -->
                 <div class="lg:col-span-6 w-full min-w-0">
                     <div
                         class="bg-white rounded-3xl p-5 md:p-6 shadow-xl border border-gray-100 max-w-[500px] w-full mx-auto lg:ml-0 lg:mr-auto">
