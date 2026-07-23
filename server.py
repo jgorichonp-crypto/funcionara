@@ -667,3 +667,116 @@ async def create_khipu_payment(order: OrderRequest):
             status_code=400,
             content={"status": "error", "detail": error_msg}
         )
+
+
+# ----------------------------------------------------
+# Integración Oficial Flow.cl (Pago Online Webpay / Débito / Crédito)
+# ----------------------------------------------------
+FLOW_API_KEY = "58A3DF96-D61E-4B33-A582-5E9ABL1EBFDF"
+FLOW_SECRET_KEY = "acdf0e0ead7d99b4ff1883c62b78a0b381718e4c"
+FLOW_API_URL = "https://www.flow.cl/api"
+
+@app.post("/api/create_flow_payment")
+async def create_flow_payment(order: OrderRequest):
+    """Crea una orden en Google Sheets y genera la URL de pago con Flow Webpay."""
+    try:
+        temp_id = f"FLOW-{int(time.time())}"
+        p_name = order.product_name if order.product_name else "Pizarra Mágica LED 12\""
+        
+        try:
+            if isinstance(order.product_price, (int, float)):
+                p_price = float(order.product_price)
+            elif isinstance(order.product_price, str):
+                p_price = float(order.product_price.replace('$', '').replace('.', '').replace(',', '').strip())
+            else:
+                p_price = 24990.0
+        except Exception:
+            p_price = 24990.0
+
+        # 1. Registrar pedido en Google Sheets como PENDIENTE_PAGO_ONLINE
+        from utils.sheets_helper import save_order_to_sheets
+        try:
+            save_order_to_sheets(
+                order_id=temp_id,
+                client_name=order.name or "Cliente Webpay",
+                phone=order.phone or "-",
+                address=order.address or "-",
+                city=order.city or "Santiago",
+                product_name=f"{p_name} (PENDIENTE WEBPAY)",
+                price=p_price,
+                rut=order.rut or "-",
+                email=order.email or "-",
+                calle=order.address or "-",
+                n_casa="-",
+                region=order.region or "-",
+                comuna=order.city or "-",
+                unidades=order.unidades or 1
+            )
+        except Exception as e_sheet:
+            logger.error(f"Error guardando en Sheets antes de Flow: {e_sheet}")
+
+        # 2. Construir parámetros para la API de Flow
+        params = {
+            "apiKey": FLOW_API_KEY,
+            "subject": f"Mundo Aura - {p_name}",
+            "currency": "CLP",
+            "amount": str(int(p_price)),
+            "email": order.email if (order.email and "@" in order.email) else "soporte.mundoaura@gmail.com",
+            "commerceOrder": temp_id,
+            "urlConfirmation": "https://www.mundoaura.cl/api/flow_confirmation",
+            "urlReturn": "https://www.mundoaura.cl/?payment=success"
+        }
+
+        # Generar firma HMAC-SHA256
+        sorted_keys = sorted(params.keys())
+        string_to_sign = "".join(f"{k}{params[k]}" for k in sorted_keys)
+        signature = hmac.new(FLOW_SECRET_KEY.encode('utf-8'), string_to_sign.encode('utf-8'), hashlib.sha256).hexdigest()
+        params["s"] = signature
+
+        # Enviar solicitud POST a Flow API 4.0
+        async with aiohttp.ClientSession() as session:
+            async with session.post(f"{FLOW_API_URL}/payment/create", data=params) as resp:
+                data = await resp.json()
+                if resp.status == 200 and "url" in data and "token" in data:
+                    payment_url = f"{data['url']}?token={data['token']}"
+                    logger.info(f"Pago Flow creado con éxito. Order: {temp_id}, URL: {payment_url}")
+                    return {
+                        "status": "success",
+                        "payment_url": payment_url,
+                        "flow_order": data.get("flowOrder")
+                    }
+                else:
+                    err_msg = data.get("message", "Error al conectar con Flow")
+                    logger.error(f"Error de Flow API: {data}")
+                    return JSONResponse(status_code=400, content={"status": "error", "detail": err_msg})
+
+    except Exception as e:
+        logger.error(f"Excepción en create_flow_payment: {e}")
+        return JSONResponse(status_code=500, content={"status": "error", "detail": str(e)})
+
+@app.post("/api/flow_confirmation")
+async def flow_confirmation(request: Request):
+    """Webhook de confirmación instantánea de pago desde Flow."""
+    try:
+        form_data = await request.form()
+        token = form_data.get("token")
+        if not token:
+            return {"status": "error", "message": "No token provided"}
+
+        params = {
+            "apiKey": FLOW_API_KEY,
+            "token": token
+        }
+        sorted_keys = sorted(params.keys())
+        string_to_sign = "".join(f"{k}{params[k]}" for k in sorted_keys)
+        signature = hmac.new(FLOW_SECRET_KEY.encode('utf-8'), string_to_sign.encode('utf-8'), hashlib.sha256).hexdigest()
+        params["s"] = signature
+
+        async with aiohttp.ClientSession() as session:
+            async with session.get(f"{FLOW_API_URL}/payment/getStatus", params=params) as resp:
+                status_data = await resp.json()
+                logger.info(f"Confirmación de Flow recibida para Token {token}: {status_data}")
+                return {"status": "OK"}
+    except Exception as e:
+        logger.error(f"Error en webhook flow_confirmation: {e}")
+        return {"status": "error", "detail": str(e)}
