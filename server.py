@@ -8,6 +8,8 @@ import logging
 import json
 import time
 import unicodedata
+import hmac
+import hashlib
 from typing import Optional
 from fastapi import FastAPI, HTTPException, BackgroundTasks, Request
 from fastapi.staticfiles import StaticFiles
@@ -733,22 +735,21 @@ async def create_flow_payment(order: OrderRequest):
         signature = hmac.new(FLOW_SECRET_KEY.encode('utf-8'), string_to_sign.encode('utf-8'), hashlib.sha256).hexdigest()
         params["s"] = signature
 
-        # Enviar solicitud POST a Flow API 4.0
-        async with aiohttp.ClientSession() as session:
-            async with session.post(f"{FLOW_API_URL}/payment/create", data=params) as resp:
-                data = await resp.json()
-                if resp.status == 200 and "url" in data and "token" in data:
-                    payment_url = f"{data['url']}?token={data['token']}"
-                    logger.info(f"Pago Flow creado con éxito. Order: {temp_id}, URL: {payment_url}")
-                    return {
-                        "status": "success",
-                        "payment_url": payment_url,
-                        "flow_order": data.get("flowOrder")
-                    }
-                else:
-                    err_msg = data.get("message", "Error al conectar con Flow")
-                    logger.error(f"Error de Flow API: {data}")
-                    return JSONResponse(status_code=400, content={"status": "error", "detail": err_msg})
+        # Enviar solicitud POST a Flow API 4.0 mediante curl_requests
+        resp = curl_requests.post(f"{FLOW_API_URL}/payment/create", data=params)
+        data = resp.json()
+        if resp.status_code == 200 and "url" in data and "token" in data:
+            payment_url = f"{data['url']}?token={data['token']}"
+            logger.info(f"Pago Flow creado con éxito. Order: {temp_id}, URL: {payment_url}")
+            return {
+                "status": "success",
+                "payment_url": payment_url,
+                "flow_order": data.get("flowOrder")
+            }
+        else:
+            err_msg = data.get("message", "Error al conectar con Flow")
+            logger.error(f"Error de Flow API: {data}")
+            return JSONResponse(status_code=400, content={"status": "error", "detail": err_msg})
 
     except Exception as e:
         logger.error(f"Excepción en create_flow_payment: {e}")
@@ -772,11 +773,10 @@ async def flow_confirmation(request: Request):
         signature = hmac.new(FLOW_SECRET_KEY.encode('utf-8'), string_to_sign.encode('utf-8'), hashlib.sha256).hexdigest()
         params["s"] = signature
 
-        async with aiohttp.ClientSession() as session:
-            async with session.get(f"{FLOW_API_URL}/payment/getStatus", params=params) as resp:
-                status_data = await resp.json()
-                logger.info(f"Confirmación de Flow recibida para Token {token}: {status_data}")
-                return {"status": "OK"}
+        resp = curl_requests.get(f"{FLOW_API_URL}/payment/getStatus", params=params)
+        status_data = resp.json()
+        logger.info(f"Confirmación de Flow recibida para Token {token}: {status_data}")
+        return {"status": "OK"}
     except Exception as e:
         logger.error(f"Error en webhook flow_confirmation: {e}")
         return {"status": "error", "detail": str(e)}
