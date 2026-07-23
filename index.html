@@ -272,7 +272,7 @@ Apple/Linear Similarity: 9/10
                             </div>
                         </div>
                         <div class="w-[88%] md:w-full shrink-0 snap-center aspect-square flex items-center justify-center rounded-2xl overflow-hidden bg-white relative group">
-                            <video src="assets/fotos producto/3.mp4" autoplay loop muted playsinline preload="metadata" class="w-full h-full object-contain pointer-events-none bg-white"></video>
+                            <video src="assets/fotos producto/3.mp4" autoplay loop muted playsinline webkit-playsinline preload="auto" class="w-full h-full object-contain pointer-events-none bg-white"></video>
                             <div class="absolute top-3 left-3 bg-white/90 backdrop-blur-sm px-2.5 py-1 rounded-full text-gray-700 text-[10px] font-bold flex items-center gap-1.5 shadow-sm">
                                 <svg class="w-3.5 h-3.5 text-emerald-600 fill-current" viewBox="0 0 20 20">
                                     <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd"/>
@@ -1746,6 +1746,42 @@ Apple/Linear Similarity: 9/10
         let basePrice = 39990;
         let expressPrice = 1990;
         let useExpress = false;
+        // Interactivity for product image gallery swiper carousel & video player
+        function changeProductImage(btn, src, index) {
+            const carousel = document.getElementById('product-carousel');
+            if (carousel && carousel.children.length > 0) {
+                let targetIndex = index;
+                if (targetIndex === undefined || targetIndex < 0) {
+                    for (let i = 0; i < carousel.children.length; i++) {
+                        const media = carousel.children[i].querySelector('img, video');
+                        if (media && media.getAttribute('src') === src) {
+                            targetIndex = i;
+                            break;
+                        }
+                    }
+                }
+                
+                if (targetIndex !== undefined && targetIndex >= 0 && carousel.children[targetIndex]) {
+                    const slide = carousel.children[targetIndex];
+                    slide.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+                    const vid = slide.querySelector('video');
+                    if (vid) {
+                        vid.play().catch(err => console.log('Video play error:', err));
+                    }
+                }
+            }
+            
+            // Highlight active thumbnail button border
+            if (btn && btn.parentElement) {
+                const buttons = btn.parentElement.querySelectorAll('button');
+                buttons.forEach(b => {
+                    b.classList.remove('border-indigo-500');
+                    b.classList.add('border-transparent');
+                });
+                btn.classList.remove('border-transparent');
+                btn.classList.add('border-indigo-500');
+            }
+        }
 
         function openReviewLightbox(imgSrc) {
             const lightboxImg = document.getElementById('lightboxImage');
