@@ -44,7 +44,7 @@ def save_order_to_sheets(
         "order_id": order_id,
         "date": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
         "client_name": client_name,
-        "phone": "+" + clean_phone if not clean_phone.startswith("+") else clean_phone,
+        "phone": "'+" + clean_phone if not clean_phone.startswith("+") else "'" + clean_phone,
         "address": address,
         "city": city,
         "product_name": product_name,

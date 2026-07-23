@@ -1885,8 +1885,17 @@ Apple/Linear Similarity: 9/10
             submitBtn.innerText = 'Procesando...';
             submitBtn.disabled = true;
 
-            // Recopilar datos (Capturando los valores de los selectores de región y comuna que ya creamos)
-            const telefonoLimpio = phone.replace('+', '');
+            // Recopilar y limpiar teléfono (Solo dígitos para evitar errores de fórmula #ERROR! en Google Sheets)
+            const soloDigitos = phone.replace(/\D/g, '');
+            let telefonoLimpio = soloDigitos;
+            if (soloDigitos.length === 9 && soloDigitos.startsWith('9')) {
+                telefonoLimpio = '56' + soloDigitos;
+            } else if (!soloDigitos.startsWith('56') && soloDigitos.length > 0) {
+                telefonoLimpio = '56' + soloDigitos;
+            }
+            // Agregar prefijo ' para forzar a Google Sheets a tratarlo como texto plano y no fórmula
+            const telefonoSheets = "'" + (telefonoLimpio.startsWith('56') ? '+' + telefonoLimpio : '+56' + telefonoLimpio);
+
             const orderData = {
                 rut: "-",
                 nombre: document.getElementById('codName').value,
@@ -1910,7 +1919,7 @@ Apple/Linear Similarity: 9/10
                 order_id: tempOrderId,
                 date: new Date().toLocaleString('sv-SE'),
                 client_name: document.getElementById('codName').value,
-                phone: telefonoLimpio.startsWith('56') ? '+' + telefonoLimpio : '+56' + telefonoLimpio,
+                phone: telefonoSheets,
                 address: document.getElementById('codAddress').value,
                 city: document.getElementById('comuna').value || selectedRegion || "Santiago",
                 product_name: "Pizarra Mágica LCD 12\"",
