@@ -588,7 +588,7 @@ if __name__ == "__main__":
 
 
 # Integración Khipu (Pago Online)
-from pykhipu.client import Client
+# pykhipu import moved inside function for serverless safety
 
 KHIPU_RECEIVER_ID = "523231"
 KHIPU_SECRET = "8a6b3479d14d5247d8e04aae1b9ac0d3380782de"
@@ -624,7 +624,12 @@ async def create_khipu_payment(order: OrderRequest):
             logger.error(f"Error al guardar en Sheets antes de Khipu: {e_sheet}")
 
         # 2. Generar link de pago en Khipu
-        client = Client(receiver_id=KHIPU_RECEIVER_ID, secret=KHIPU_SECRET)
+        try:
+            from pykhipu.client import Client
+            client = Client(receiver_id=KHIPU_RECEIVER_ID, secret=KHIPU_SECRET)
+        except ImportError:
+            logger.error("Librería pykhipu no disponible en Vercel runtime.")
+            raise HTTPException(status_code=500, detail="Módulo de pago Khipu no disponible en runtime.")
         res = client.payments.post(
             subject=f"Mundo Aura - {p_name}",
             currency="CLP",
