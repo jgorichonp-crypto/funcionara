@@ -360,8 +360,8 @@ Apple/Linear Similarity: 9/10
                             <div class="space-y-3 mb-4" id="promo-selector-vertical">
                                 <!-- Promo 1 -->
                                 <label onclick="selectPromo(1, 24990); event.preventDefault();" id="label-promo-1" 
-                                    class="relative flex items-center justify-between border border-gray-200 rounded-2xl p-3.5 cursor-pointer bg-white transition-all shadow-sm select-none hover:border-emerald-300">
-                                    <input type="radio" name="promo" value="1" class="hidden">
+                                    class="relative flex items-center justify-between border-2 border-emerald-500 rounded-2xl p-3.5 cursor-pointer bg-emerald-50/40 transition-all shadow-sm select-none hover:border-emerald-500">
+                                    <input type="radio" name="promo" value="1" class="hidden" checked>
                                     <div class="flex items-center gap-3">
                                         <img src="assets/fotos producto/1.webp" alt="1 Unidad" class="w-12 h-12 rounded-xl object-contain bg-gray-50 border border-gray-100 p-0.5" loading="lazy" decoding="async">
                                         <div class="text-left">
@@ -377,9 +377,9 @@ Apple/Linear Similarity: 9/10
                                 </label>
 
                                 <!-- Promo 2 (Default Selected) -->
-                                <label onclick="selectPromo(2, 39990); event.preventDefault();" id="label-promo-2" 
-                                    class="relative flex items-center justify-between border-2 border-emerald-500 rounded-2xl p-3.5 cursor-pointer bg-emerald-50/40 transition-all shadow-sm select-none hover:border-emerald-500">
-                                    <input type="radio" name="promo" value="2" class="hidden" checked>
+                                <label onclick="selectPromo(2, 39990); event.preventDefault();" id="label-promo-2"
+                                    class="relative flex items-center justify-between border border-gray-200 rounded-2xl p-3.5 cursor-pointer bg-white transition-all shadow-sm select-none hover:border-emerald-300">
+                                    <input type="radio" name="promo" value="2" class="hidden">
                                     <div class="flex items-center gap-3">
                                         <img src="assets/fotos producto/2.webp" alt="2 Unidades" class="w-12 h-12 rounded-xl object-contain bg-gray-50 border border-gray-100 p-0.5" loading="lazy" decoding="async">
                                         <div class="text-left">
@@ -1717,7 +1717,7 @@ Apple/Linear Similarity: 9/10
 
         // Initialize on load
         window.addEventListener('DOMContentLoaded', () => {
-            selectPromo(2, 39990);
+            selectPromo(1, 24990);
         });
 
         let selectedRegion = '-';
@@ -1915,7 +1915,7 @@ Apple/Linear Similarity: 9/10
                     document.getElementById('codForm').reset();
                     const bumpCheckbox = document.getElementById('express-bump');
                     if (bumpCheckbox) bumpCheckbox.checked = false;
-                    selectPromo(2, 39990);
+                    selectPromo(1, 24990);
                     submitBtn.innerText = 'PÍDELO AHORA Y PAGA EN CASA';
                     submitBtn.disabled = false;
 
