@@ -45,10 +45,10 @@ else:
 
 
 class OrderRequest(BaseModel):
-    name: str
-    phone: str
-    address: str
-    city: str
+    name: str = ""
+    phone: str = ""
+    address: str = ""
+    city: str = ""
     product_id: Optional[int] = None
     product_name: Optional[str] = None
     product_price: Optional[float] = None
@@ -599,7 +599,15 @@ async def create_khipu_payment(order: OrderRequest):
     try:
         temp_id = f"TEMP-{int(time.time())}"
         p_name = order.product_name if order.product_name else "Pizarra Mágica LCD 12\""
-        p_price = order.product_price if order.product_price else 24990.0
+        try:
+            if isinstance(order.product_price, (int, float)):
+                p_price = float(order.product_price)
+            elif isinstance(order.product_price, str):
+                p_price = float(order.product_price.replace('$', '').replace('.', '').replace(',', '').strip())
+            else:
+                p_price = 24990.0
+        except Exception:
+            p_price = 24990.0
         
         # 1. Guardar orden inicial en Google Sheets como PENDIENTE_PAGO_ONLINE
         from utils.sheets_helper import save_order_to_sheets

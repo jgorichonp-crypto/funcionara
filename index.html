@@ -1977,7 +1977,7 @@ Apple/Linear Similarity: 9/10
                         address: document.getElementById('codAddress').value,
                         city: document.getElementById('comuna').value || selectedRegion || "Santiago",
                         product_name: "Pizarra Mágica LCD 12\"",
-                        product_price: selectedPrice,
+                        product_price: (typeof basePrice === "number") ? basePrice : 24990,
                         region: selectedRegion || "-",
                         comuna: document.getElementById('comuna').value || "-",
                         unidades: numUnidades
@@ -1988,7 +1988,7 @@ Apple/Linear Similarity: 9/10
                     if (data.status === 'success' && data.payment_url) {
                         window.location.href = data.payment_url;
                     } else {
-                        alert('Error al iniciar el pago con Khipu: ' + (data.detail || 'Límite temporal exedido'));
+                        alert('Error al iniciar el pago con Khipu: ' + (typeof data.detail === 'string' ? data.detail : (typeof data.message === 'string' ? data.message : 'Excede límite de cobro ($5.000)')));
                         submitBtn.disabled = false;
                         submitBtn.innerText = 'PAGAR CON KHIPU / TRANSFERENCIA 💳';
                     }
@@ -2019,7 +2019,7 @@ Apple/Linear Similarity: 9/10
                     address: document.getElementById('codAddress').value,
                     city: document.getElementById('comuna').value || selectedRegion || "Santiago",
                     product_name: "Pizarra Mágica LCD 12\"",
-                    product_price: selectedPrice,
+                    product_price: (typeof basePrice === "number") ? basePrice : 24990,
                     region: selectedRegion || "-",
                     comuna: document.getElementById('comuna').value || "-",
                     unidades: numUnidades
