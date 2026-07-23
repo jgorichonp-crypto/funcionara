@@ -585,3 +585,61 @@ if __name__ == "__main__":
     import uvicorn
     logger.info("⚡ Iniciando servidor local en http://localhost:8000")
     uvicorn.run("server:app", host="127.0.0.1", port=8000, reload=True)
+
+
+# Integración Khipu (Pago Online)
+from pykhipu.client import Client
+
+KHIPU_RECEIVER_ID = "523231"
+KHIPU_SECRET = "8a6b3479d14d5247d8e04aae1b9ac0d3380782de"
+
+@app.post("/api/create_khipu_payment")
+async def create_khipu_payment(order: OrderRequest):
+    """Crea una orden en Google Sheets y genera un link de pago con Khipu."""
+    try:
+        temp_id = f"TEMP-{int(time.time())}"
+        p_name = order.product_name if order.product_name else "Pizarra Mágica LCD 12\""
+        p_price = order.product_price if order.product_price else 24990.0
+        
+        # 1. Guardar orden inicial en Google Sheets como PENDIENTE_PAGO_ONLINE
+        from utils.sheets_helper import save_order_to_sheets
+        try:
+            save_order_to_sheets(
+                order_id=temp_id,
+                client_name=order.name,
+                phone=order.phone,
+                address=order.address,
+                city=order.city,
+                product_name=p_name,
+                price=p_price,
+                rut=order.rut or "-",
+                email=order.email or "-",
+                calle=order.address,
+                n_casa="-",
+                region=order.region or "-",
+                comuna=order.city or "-",
+                unidades=order.unidades or 1
+            )
+        except Exception as e_sheet:
+            logger.error(f"Error al guardar en Sheets antes de Khipu: {e_sheet}")
+
+        # 2. Generar link de pago en Khipu
+        client = Client(receiver_id=KHIPU_RECEIVER_ID, secret=KHIPU_SECRET)
+        res = client.payments.post(
+            subject=f"Mundo Aura - {p_name}",
+            currency="CLP",
+            amount=int(p_price),
+            return_url="https://mundoaura.cl/?payment=success",
+            cancel_url="https://mundoaura.cl/?payment=cancel",
+            custom=temp_id,
+            payer_email=order.email if (order.email and "@" in order.email) else "soporte.mundoaura@gmail.com"
+        )
+        logger.info(f"Creado pago Khipu ID: {res.payment_id} URL: {res.payment_url}")
+        return {
+            "status": "success",
+            "payment_id": res.payment_id,
+            "payment_url": res.payment_url
+        }
+    except Exception as e:
+        logger.error(f"Error al crear pago Khipu: {e}")
+        raise HTTPException(status_code=400, detail=str(e))
