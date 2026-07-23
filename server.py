@@ -193,8 +193,12 @@ def login_to_dropi() -> Optional[str]:
     Autentica con la API de Dropi Chile usando curl_cffi para evadir el bloqueo TLS/WAF.
     Almacena el token de usuario en la variable global dropi_session.
     """
-    logger.info("🧪 [MODO SIMULACIÓN FORZADO] Conexión a Dropi deshabilitada. Operando en modo simulación.")
-    return None
+    email = settings.dropi_email
+    password = settings.dropi_password
+
+    if not email or not password or "placeholder" in email.lower():
+        logger.warning("⚠️ Credenciales de Dropi Chile no configuradas para inicio de sesión programático.")
+        return None
         
     payload = {
         "email": email,
@@ -235,13 +239,21 @@ def login_to_dropi() -> Optional[str]:
 def get_dropi_token(force_refresh: bool = False) -> Optional[str]:
     """
     Retorna el token actual en memoria. Si no existe, si está por expirar o si force_refresh es True,
-    obtiene uno nuevo iniciando sesión.
+    obtiene uno nuevo iniciando sesión programática. Si no es posible, usa el dropi_api_key del .env de respaldo.
     """
     token = dropi_session.get("token")
     expires_at = dropi_session.get("expires_at", 0)
     
-    if not token or time.time() > expires_at or force_refresh:
-        token = login_to_dropi()
+    # 1. Si tenemos credenciales, intentamos iniciar sesión programática primero (es más fiable)
+    if settings.dropi_email and settings.dropi_password and "placeholder" not in settings.dropi_email.lower():
+        if not token or time.time() > expires_at or force_refresh:
+            token = login_to_dropi()
+        if token:
+            return token
+            
+    # 2. Si falla o no está configurada, usar el token estático del .env
+    if settings.dropi_api_key and settings.dropi_api_key.startswith("eyJ") and not force_refresh:
+        return settings.dropi_api_key
         
     return token
 

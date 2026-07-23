@@ -69,7 +69,7 @@ Apple/Linear Similarity: 9/10
         }
     </style>
     <!-- Confetti Library -->
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 <!-- Meta Pixel Code -->
 <script>
 !function(f,b,e,v,n,t,s)
@@ -85,7 +85,7 @@ fbq('track', 'PageView');
 </script>
 <noscript><img height="1" width="1" style="display:none"
 src="https://www.facebook.com/tr?id=1051864450604425&ev=PageView&noscript=1"
-/></noscript>
+/ loading="lazy" decoding="async"></noscript>
 <!-- End Meta Pixel Code -->
     <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
@@ -125,7 +125,7 @@ src="https://www.facebook.com/tr?id=1051864450604425&ev=PageView&noscript=1"
             <div class="flex-1 flex justify-center items-center cursor-pointer" onclick="window.scrollTo(0,0)">
                 <h2 class="text-xl md:text-2xl font-medium tracking-tight flex items-center text-gray-900">
                     MUNDO<img src="assets/logo.png" alt="*"
-                        class="h-20 md:h-24 w-auto object-contain -mx-2 md:-mx-4 rounded-sm">AURA
+                        class="h-20 md:h-24 w-auto object-contain -mx-2 md:-mx-4 rounded-sm" loading="lazy" decoding="async">AURA
                 </h2>
             </div>
             
@@ -156,27 +156,27 @@ src="https://www.facebook.com/tr?id=1051864450604425&ev=PageView&noscript=1"
                 <div class="lg:col-span-6 flex flex-col-reverse md:flex-row gap-4 w-full max-w-[500px] mx-auto lg:ml-auto lg:mr-0 min-w-0">
                     <!-- Thumbnails -->
                     <div id="thumbnail-container" class="flex flex-row md:flex-col gap-3 shrink-0 md:w-20 justify-start overflow-x-auto md:overflow-x-visible pb-2 md:pb-0 w-full md:w-auto">
-                        <button onclick="changeProductImage(this, 'assets/fotos producto/1.png')" 
+                        <button onclick="changeProductImage(this, 'assets/fotos producto/1.webp')" 
                             class="w-12 h-12 md:w-16 md:h-16 shrink-0 aspect-square bg-gray-50 rounded-xl border-2 border-indigo-500 focus:outline-none transition-all hover:bg-gray-100 overflow-hidden shadow-sm">
-                            <img src="assets/fotos producto/1.png" class="w-full h-full object-contain">
+                            <img src="assets/fotos producto/1.webp" class="w-full h-full object-contain" loading="lazy" decoding="async">
                         </button>
                         <button onclick="changeProductImage(this, 'assets/fotos producto/2.jpg')" 
                             class="w-12 h-12 md:w-16 md:h-16 shrink-0 aspect-square bg-gray-50 rounded-xl border-2 border-transparent focus:border-indigo-500 focus:outline-none transition-all hover:bg-gray-100 overflow-hidden shadow-sm border border-gray-100">
-                            <img src="assets/fotos producto/2.jpg" class="w-full h-full object-contain">
+                            <img src="assets/fotos producto/2.jpg" class="w-full h-full object-contain" loading="lazy" decoding="async">
                         </button>
                         <button onclick="changeProductImage(this, 'assets/fotos producto/3.jpg')" 
                             class="w-12 h-12 md:w-16 md:h-16 shrink-0 aspect-square bg-gray-50 rounded-xl border-2 border-transparent focus:border-indigo-500 focus:outline-none transition-all hover:bg-gray-100 overflow-hidden shadow-sm border border-gray-100">
-                            <img src="assets/fotos producto/3.jpg" class="w-full h-full object-contain">
+                            <img src="assets/fotos producto/3.jpg" class="w-full h-full object-contain" loading="lazy" decoding="async">
                         </button>
                         <button onclick="changeProductImage(this, 'assets/fotos producto/4.jpg')" 
                             class="w-12 h-12 md:w-16 md:h-16 shrink-0 aspect-square bg-gray-50 rounded-xl border-2 border-transparent focus:border-indigo-500 focus:outline-none transition-all hover:bg-gray-100 overflow-hidden shadow-sm border border-gray-100">
-                            <img src="assets/fotos producto/4.jpg" class="w-full h-full object-contain">
+                            <img src="assets/fotos producto/4.jpg" class="w-full h-full object-contain" loading="lazy" decoding="async">
                         </button>
                     </div>
                                                             <!-- Main Image (Swipeable Carousel with peek effect) -->
                     <div id="product-carousel" class="flex gap-4 overflow-x-auto snap-x snap-mandatory scrollbar-none w-full pb-2 md:pb-0 select-none cursor-grab active:cursor-grabbing px-1">
                         <div class="w-[88%] md:w-full shrink-0 snap-center aspect-square flex items-center justify-center rounded-2xl overflow-hidden border border-gray-100 bg-white relative group">
-                            <img src="assets/fotos producto/1.png" class="w-full h-full object-contain pointer-events-none">
+                            <img src="assets/fotos producto/1.webp" class="w-full h-full object-contain pointer-events-none" fetchpriority="high" loading="eager" decoding="async">
                             <div class="absolute top-3 left-3 bg-white/90 backdrop-blur-sm p-1.5 rounded-full shadow-sm">
                                 <svg class="w-4 h-4 text-gray-700" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v6m3-3H7"></path>
@@ -184,7 +184,7 @@ src="https://www.facebook.com/tr?id=1051864450604425&ev=PageView&noscript=1"
                             </div>
                         </div>
                         <div class="w-[88%] md:w-full shrink-0 snap-center aspect-square flex items-center justify-center rounded-2xl overflow-hidden border border-gray-100 bg-white relative group">
-                            <img src="assets/fotos producto/2.jpg" class="w-full h-full object-contain pointer-events-none">
+                            <img src="assets/fotos producto/2.jpg" class="w-full h-full object-contain pointer-events-none" loading="lazy" decoding="async">
                             <div class="absolute top-3 left-3 bg-white/90 backdrop-blur-sm p-1.5 rounded-full shadow-sm">
                                 <svg class="w-4 h-4 text-gray-700" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v6m3-3H7"></path>
@@ -192,7 +192,7 @@ src="https://www.facebook.com/tr?id=1051864450604425&ev=PageView&noscript=1"
                             </div>
                         </div>
                         <div class="w-[88%] md:w-full shrink-0 snap-center aspect-square flex items-center justify-center rounded-2xl overflow-hidden border border-gray-100 bg-white relative group">
-                            <img src="assets/fotos producto/3.jpg" class="w-full h-full object-contain pointer-events-none">
+                            <img src="assets/fotos producto/3.jpg" class="w-full h-full object-contain pointer-events-none" loading="lazy" decoding="async">
                             <div class="absolute top-3 left-3 bg-white/90 backdrop-blur-sm p-1.5 rounded-full shadow-sm">
                                 <svg class="w-4 h-4 text-gray-700" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v6m3-3H7"></path>
@@ -200,41 +200,7 @@ src="https://www.facebook.com/tr?id=1051864450604425&ev=PageView&noscript=1"
                             </div>
                         </div>
                         <div class="w-[88%] md:w-full shrink-0 snap-center aspect-square flex items-center justify-center rounded-2xl overflow-hidden border border-gray-100 bg-white relative group">
-                            <img src="assets/fotos producto/4.jpg" class="w-full h-full object-contain pointer-events-none">
-                            <div class="absolute top-3 left-3 bg-white/90 backdrop-blur-sm p-1.5 rounded-full shadow-sm">
-                                <svg class="w-4 h-4 text-gray-700" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v6m3-3H7"></path>
-                                </svg>
-                            </div>
-                        </div>
-                    </div>
-                        </div>
-                        <div class="w-[88%] md:w-full shrink-0 snap-center aspect-square flex items-center justify-center rounded-2xl overflow-hidden border border-gray-100 bg-white relative group">
-                            <img src="assets/fotos producto/2.jpg" class="w-full h-full object-contain pointer-events-none">
-                            <div class="absolute top-3 left-3 bg-white/90 backdrop-blur-sm p-1.5 rounded-full shadow-sm">
-                                <svg class="w-4 h-4 text-gray-700" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v6m3-3H7"></path>
-                                </svg>
-                            </div>
-                        </div>
-                        <div class="w-[88%] md:w-full shrink-0 snap-center aspect-square flex items-center justify-center rounded-2xl overflow-hidden border border-gray-100 bg-white relative group">
-                            <img src="assets/fotos producto/3.jpg" class="w-full h-full object-contain pointer-events-none">
-                            <div class="absolute top-3 left-3 bg-white/90 backdrop-blur-sm p-1.5 rounded-full shadow-sm">
-                                <svg class="w-4 h-4 text-gray-700" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v6m3-3H7"></path>
-                                </svg>
-                            </div>
-                        </div>
-                        <div class="w-[88%] md:w-full shrink-0 snap-center aspect-square flex items-center justify-center rounded-2xl overflow-hidden border border-gray-100 bg-white relative group">
-                            <img src="assets/fotos producto/4.jpg" class="w-full h-full object-contain pointer-events-none">
-                            <div class="absolute top-3 left-3 bg-white/90 backdrop-blur-sm p-1.5 rounded-full shadow-sm">
-                                <svg class="w-4 h-4 text-gray-700" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v6m3-3H7"></path>
-                                </svg>
-                            </div>
-                        </div>
-                        <div class="w-[88%] md:w-full shrink-0 snap-center aspect-square flex items-center justify-center rounded-2xl overflow-hidden border border-gray-100 bg-white relative group">
-                            <img src="assets/fotos producto/5.webp" class="w-full h-full object-contain pointer-events-none">
+                            <img src="assets/fotos producto/4.jpg" class="w-full h-full object-contain pointer-events-none" loading="lazy" decoding="async">
                             <div class="absolute top-3 left-3 bg-white/90 backdrop-blur-sm p-1.5 rounded-full shadow-sm">
                                 <svg class="w-4 h-4 text-gray-700" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v6m3-3H7"></path>
@@ -244,7 +210,7 @@ src="https://www.facebook.com/tr?id=1051864450604425&ev=PageView&noscript=1"
                     </div>
                         </div>
                         <div class="w-[88%] md:w-full shrink-0 snap-center aspect-square flex items-center justify-center rounded-2xl overflow-hidden border border-gray-100 bg-white relative group">
-                            <img src="assets/fotos producto/2.jpg" class="w-full h-full object-contain pointer-events-none">
+                            <img src="assets/fotos producto/2.jpg" class="w-full h-full object-contain pointer-events-none" loading="lazy" decoding="async">
                             <div class="absolute top-3 left-3 bg-white/90 backdrop-blur-sm p-1.5 rounded-full shadow-sm">
                                 <svg class="w-4 h-4 text-gray-700" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v6m3-3H7"></path>
@@ -252,7 +218,7 @@ src="https://www.facebook.com/tr?id=1051864450604425&ev=PageView&noscript=1"
                             </div>
                         </div>
                         <div class="w-[88%] md:w-full shrink-0 snap-center aspect-square flex items-center justify-center rounded-2xl overflow-hidden border border-gray-100 bg-white relative group">
-                            <img src="assets/fotos producto/2.jpg" class="w-full h-full object-contain pointer-events-none">
+                            <img src="assets/fotos producto/3.jpg" class="w-full h-full object-contain pointer-events-none" loading="lazy" decoding="async">
                             <div class="absolute top-3 left-3 bg-white/90 backdrop-blur-sm p-1.5 rounded-full shadow-sm">
                                 <svg class="w-4 h-4 text-gray-700" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v6m3-3H7"></path>
@@ -260,7 +226,7 @@ src="https://www.facebook.com/tr?id=1051864450604425&ev=PageView&noscript=1"
                             </div>
                         </div>
                         <div class="w-[88%] md:w-full shrink-0 snap-center aspect-square flex items-center justify-center rounded-2xl overflow-hidden border border-gray-100 bg-white relative group">
-                            <img src="assets/fotos producto/JHEN2_Gemini3_NanoBananaPro__2026-02-16_14-26-53.webp" class="w-full h-full object-contain pointer-events-none">
+                            <img src="assets/fotos producto/4.jpg" class="w-full h-full object-contain pointer-events-none" loading="lazy" decoding="async">
                             <div class="absolute top-3 left-3 bg-white/90 backdrop-blur-sm p-1.5 rounded-full shadow-sm">
                                 <svg class="w-4 h-4 text-gray-700" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v6m3-3H7"></path>
@@ -268,15 +234,7 @@ src="https://www.facebook.com/tr?id=1051864450604425&ev=PageView&noscript=1"
                             </div>
                         </div>
                         <div class="w-[88%] md:w-full shrink-0 snap-center aspect-square flex items-center justify-center rounded-2xl overflow-hidden border border-gray-100 bg-white relative group">
-                            <img src="assets/fotos producto/JHEN_2_Gemini_3_Nano_Banana_Pro__2026-02-16_14-29-52.webp" class="w-full h-full object-contain pointer-events-none">
-                            <div class="absolute top-3 left-3 bg-white/90 backdrop-blur-sm p-1.5 rounded-full shadow-sm">
-                                <svg class="w-4 h-4 text-gray-700" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v6m3-3H7"></path>
-                                </svg>
-                            </div>
-                        </div>
-                        <div class="w-[88%] md:w-full shrink-0 snap-center aspect-square flex items-center justify-center rounded-2xl overflow-hidden border border-gray-100 bg-white relative group">
-                            <img src="assets/fotos producto/JHEN_2_Gemini_3_Nano_Banana_Pro__2026-02-16_14-32-31.webp" class="w-full h-full object-contain pointer-events-none">
+                            <img src="assets/fotos producto/5.webp" class="w-full h-full object-contain pointer-events-none" loading="lazy" decoding="async">
                             <div class="absolute top-3 left-3 bg-white/90 backdrop-blur-sm p-1.5 rounded-full shadow-sm">
                                 <svg class="w-4 h-4 text-gray-700" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v6m3-3H7"></path>
@@ -286,7 +244,7 @@ src="https://www.facebook.com/tr?id=1051864450604425&ev=PageView&noscript=1"
                     </div>
                         </div>
                         <div class="w-[88%] md:w-full shrink-0 snap-center aspect-square flex items-center justify-center rounded-2xl overflow-hidden border border-gray-100 bg-white relative group">
-                            <img src="assets/fotos producto/2.jpg" class="w-full h-full object-contain pointer-events-none">
+                            <img src="assets/fotos producto/2.jpg" class="w-full h-full object-contain pointer-events-none" loading="lazy" decoding="async">
                             <div class="absolute top-3 left-3 bg-white/90 backdrop-blur-sm p-1.5 rounded-full shadow-sm">
                                 <svg class="w-4 h-4 text-gray-700" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v6m3-3H7"></path>
@@ -294,7 +252,7 @@ src="https://www.facebook.com/tr?id=1051864450604425&ev=PageView&noscript=1"
                             </div>
                         </div>
                         <div class="w-[88%] md:w-full shrink-0 snap-center aspect-square flex items-center justify-center rounded-2xl overflow-hidden border border-gray-100 bg-white relative group">
-                            <img src="assets/fotos producto/2.jpg" class="w-full h-full object-contain pointer-events-none">
+                            <img src="assets/fotos producto/2.jpg" class="w-full h-full object-contain pointer-events-none" loading="lazy" decoding="async">
                             <div class="absolute top-3 left-3 bg-white/90 backdrop-blur-sm p-1.5 rounded-full shadow-sm">
                                 <svg class="w-4 h-4 text-gray-700" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v6m3-3H7"></path>
@@ -302,7 +260,7 @@ src="https://www.facebook.com/tr?id=1051864450604425&ev=PageView&noscript=1"
                             </div>
                         </div>
                         <div class="w-[88%] md:w-full shrink-0 snap-center aspect-square flex items-center justify-center rounded-2xl overflow-hidden border border-gray-100 bg-white relative group">
-                            <img src="assets/fotos producto/4.png" class="w-full h-full object-contain pointer-events-none">
+                            <img src="assets/fotos producto/JHEN2_Gemini3_NanoBananaPro__2026-02-16_14-26-53.webp" class="w-full h-full object-contain pointer-events-none" loading="lazy" decoding="async">
                             <div class="absolute top-3 left-3 bg-white/90 backdrop-blur-sm p-1.5 rounded-full shadow-sm">
                                 <svg class="w-4 h-4 text-gray-700" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v6m3-3H7"></path>
@@ -310,7 +268,49 @@ src="https://www.facebook.com/tr?id=1051864450604425&ev=PageView&noscript=1"
                             </div>
                         </div>
                         <div class="w-[88%] md:w-full shrink-0 snap-center aspect-square flex items-center justify-center rounded-2xl overflow-hidden border border-gray-100 bg-white relative group">
-                            <img src="assets/fotos producto/5.png" class="w-full h-full object-contain pointer-events-none">
+                            <img src="assets/fotos producto/JHEN_2_Gemini_3_Nano_Banana_Pro__2026-02-16_14-29-52.webp" class="w-full h-full object-contain pointer-events-none" loading="lazy" decoding="async">
+                            <div class="absolute top-3 left-3 bg-white/90 backdrop-blur-sm p-1.5 rounded-full shadow-sm">
+                                <svg class="w-4 h-4 text-gray-700" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v6m3-3H7"></path>
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="w-[88%] md:w-full shrink-0 snap-center aspect-square flex items-center justify-center rounded-2xl overflow-hidden border border-gray-100 bg-white relative group">
+                            <img src="assets/fotos producto/JHEN_2_Gemini_3_Nano_Banana_Pro__2026-02-16_14-32-31.webp" class="w-full h-full object-contain pointer-events-none" loading="lazy" decoding="async">
+                            <div class="absolute top-3 left-3 bg-white/90 backdrop-blur-sm p-1.5 rounded-full shadow-sm">
+                                <svg class="w-4 h-4 text-gray-700" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v6m3-3H7"></path>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                        </div>
+                        <div class="w-[88%] md:w-full shrink-0 snap-center aspect-square flex items-center justify-center rounded-2xl overflow-hidden border border-gray-100 bg-white relative group">
+                            <img src="assets/fotos producto/2.jpg" class="w-full h-full object-contain pointer-events-none" loading="lazy" decoding="async">
+                            <div class="absolute top-3 left-3 bg-white/90 backdrop-blur-sm p-1.5 rounded-full shadow-sm">
+                                <svg class="w-4 h-4 text-gray-700" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v6m3-3H7"></path>
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="w-[88%] md:w-full shrink-0 snap-center aspect-square flex items-center justify-center rounded-2xl overflow-hidden border border-gray-100 bg-white relative group">
+                            <img src="assets/fotos producto/2.jpg" class="w-full h-full object-contain pointer-events-none" loading="lazy" decoding="async">
+                            <div class="absolute top-3 left-3 bg-white/90 backdrop-blur-sm p-1.5 rounded-full shadow-sm">
+                                <svg class="w-4 h-4 text-gray-700" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v6m3-3H7"></path>
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="w-[88%] md:w-full shrink-0 snap-center aspect-square flex items-center justify-center rounded-2xl overflow-hidden border border-gray-100 bg-white relative group">
+                            <img src="assets/fotos producto/4.png" class="w-full h-full object-contain pointer-events-none" loading="lazy" decoding="async">
+                            <div class="absolute top-3 left-3 bg-white/90 backdrop-blur-sm p-1.5 rounded-full shadow-sm">
+                                <svg class="w-4 h-4 text-gray-700" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v6m3-3H7"></path>
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="w-[88%] md:w-full shrink-0 snap-center aspect-square flex items-center justify-center rounded-2xl overflow-hidden border border-gray-100 bg-white relative group">
+                            <img src="assets/fotos producto/5.png" class="w-full h-full object-contain pointer-events-none" loading="lazy" decoding="async">
                             <div class="absolute top-3 left-3 bg-white/90 backdrop-blur-sm p-1.5 rounded-full shadow-sm">
                                 <svg class="w-4 h-4 text-gray-700" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v6m3-3H7"></path>
@@ -524,7 +524,7 @@ src="https://www.facebook.com/tr?id=1051864450604425&ev=PageView&noscript=1"
                     </ul>
                 </div>
                 <div class="max-w-[400px] w-full mx-auto rounded-3xl overflow-hidden shadow-lg border border-gray-100 bg-white flex justify-center">
-                    <img src="assets/gifs/Untitleddesign34-ezgif.com-video-to-gif-converter.webp" alt="Beneficios" class="w-full aspect-square object-cover">
+                    <img src="assets/gifs/Untitleddesign34-ezgif.com-video-to-gif-converter.webp" alt="Beneficios" class="w-full aspect-square object-cover" loading="lazy" decoding="async">
                 </div>
             </div>
         </section>
@@ -836,7 +836,7 @@ src="https://www.facebook.com/tr?id=1051864450604425&ev=PageView&noscript=1"
                     <!-- GIF Right -->
                     <div class="flex justify-center md:justify-end w-full pl-0 md:pl-8">
                         <div class="w-full max-w-[380px] rounded-3xl overflow-hidden shadow-lg border border-gray-100 bg-white flex justify-center">
-                            <img src="assets/gifs/gif3_optimizado.webp" alt="Cómo Usar el Producto" class="w-full aspect-square object-cover" onerror="this.src='https://placehold.co/800x800/f8fafc/64748b?text=GIF+COMO+USAR'">
+                            <img src="assets/gifs/gif3_optimizado.webp" alt="Cómo Usar el Producto" class="w-full aspect-square object-cover" onerror="this.src='https://placehold.co/800x800/f8fafc/64748b?text=GIF+COMO+USAR'" loading="lazy" decoding="async">
                         </div>
                     </div>
                 </div>
@@ -851,25 +851,25 @@ src="https://www.facebook.com/tr?id=1051864450604425&ev=PageView&noscript=1"
                     <div class="flex overflow-x-auto gap-4 md:gap-6 snap-x snap-mandatory pb-8 pt-4 px-2 -mx-2 hide-scrollbar">
                         <!-- Video 1 -->
                         <div class="flex-none w-[280px] md:w-[325px] snap-center shrink-0">
-                            <video src="assets/videos tik tok/WhatsApp Video 2026-07-21 at 17.09.34.mp4" autoplay loop
+                            <video preload="none" playsinline src="assets/videos tik tok/WhatsApp Video 2026-07-21 at 17.09.34.mp4" autoplay loop
                                 muted playsinline class="w-full rounded-2xl shadow-xl border border-gray-200"
                                 style="aspect-ratio: 9/16; object-fit: cover;"></video>
                         </div>
                         <!-- Video 2 -->
                         <div class="flex-none w-[280px] md:w-[325px] snap-center shrink-0">
-                            <video src="assets/videos tik tok/WhatsApp Video 2026-07-21 at 17.12.25.mp4" autoplay
+                            <video preload="none" playsinline src="assets/videos tik tok/WhatsApp Video 2026-07-21 at 17.12.25.mp4" autoplay
                                 loop muted playsinline class="w-full rounded-2xl shadow-xl border border-gray-200"
                                 style="aspect-ratio: 9/16; object-fit: cover;"></video>
                         </div>
                         <!-- Video 3 -->
                         <div class="flex-none w-[280px] md:w-[325px] snap-center shrink-0">
-                            <video src="assets/videos tik tok/WhatsApp Video 2026-07-21 at 17.12.42.mp4" autoplay loop
+                            <video preload="none" playsinline src="assets/videos tik tok/WhatsApp Video 2026-07-21 at 17.12.42.mp4" autoplay loop
                                 muted playsinline class="w-full rounded-2xl shadow-xl border border-gray-200"
                                 style="aspect-ratio: 9/16; object-fit: cover;"></video>
                         </div>
                         <!-- Video 4 -->
                         <div class="flex-none w-[280px] md:w-[325px] snap-center shrink-0">
-                            <video src="assets/videos tik tok/WhatsApp Video 2026-07-21 at 17.12.52.mp4" autoplay loop
+                            <video preload="none" playsinline src="assets/videos tik tok/WhatsApp Video 2026-07-21 at 17.12.52.mp4" autoplay loop
                                 muted playsinline class="w-full rounded-2xl shadow-xl border border-gray-200"
                                 style="aspect-ratio: 9/16; object-fit: cover;"></video>
                         </div></div>
@@ -905,13 +905,13 @@ src="https://www.facebook.com/tr?id=1051864450604425&ev=PageView&noscript=1"
                     <h4 class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-4">Fotos de clientes</h4>
                     <div class="flex gap-3 overflow-x-auto pb-2 scrollbar-none justify-center">
                         <div onclick="openReviewLightbox('assets/reseñas/1756358604__0__N7S9YUcE__b6223ea8-923f-4358-aab8-bfc94c849375__original.webp')" class="w-24 h-24 rounded-lg overflow-hidden border border-gray-200 bg-gray-50 flex-shrink-0 cursor-pointer hover:opacity-90 transition-opacity">
-                            <img src="assets/reseñas/1756358604__0__N7S9YUcE__b6223ea8-923f-4358-aab8-bfc94c849375__original.webp" class="w-full h-full object-cover">
+                            <img src="assets/reseñas/1756358604__0__N7S9YUcE__b6223ea8-923f-4358-aab8-bfc94c849375__original.webp" class="w-full h-full object-cover" loading="lazy" decoding="async">
                         </div>
                         <div onclick="openReviewLightbox('assets/reseñas/1756358604__0__uyA61fBB__b201df53-7e72-4cb9-b9da-41d600fb5879__original.webp')" class="w-24 h-24 rounded-lg overflow-hidden border border-gray-200 bg-gray-50 flex-shrink-0 cursor-pointer hover:opacity-90 transition-opacity">
-                            <img src="assets/reseñas/1756358604__0__uyA61fBB__b201df53-7e72-4cb9-b9da-41d600fb5879__original.webp" class="w-full h-full object-cover">
+                            <img src="assets/reseñas/1756358604__0__uyA61fBB__b201df53-7e72-4cb9-b9da-41d600fb5879__original.webp" class="w-full h-full object-cover" loading="lazy" decoding="async">
                         </div>
                         <div onclick="openReviewLightbox('assets/reseñas/1756358606__0__jsP0bfDj__1476d55f-6895-40e1-979e-353d12f558a3__original.webp')" class="w-24 h-24 rounded-lg overflow-hidden border border-gray-200 bg-gray-50 flex-shrink-0 cursor-pointer hover:opacity-90 transition-opacity">
-                            <img src="assets/reseñas/1756358606__0__jsP0bfDj__1476d55f-6895-40e1-979e-353d12f558a3__original.webp" class="w-full h-full object-cover">
+                            <img src="assets/reseñas/1756358606__0__jsP0bfDj__1476d55f-6895-40e1-979e-353d12f558a3__original.webp" class="w-full h-full object-cover" loading="lazy" decoding="async">
                         </div>
                     </div>
                 </div>
@@ -1471,7 +1471,7 @@ src="https://www.facebook.com/tr?id=1051864450604425&ev=PageView&noscript=1"
 
     <!-- WhatsApp Floating Button -->
     <a href="https://wa.me/56979460119?text=%C2%A1Hola%20MUNDO%20AURA%21%20tengo%20dudas%20sobre...%20la%20Pizarra%20Magica%20LCD%2012%22" target="_blank" class="fixed bottom-6 right-6 z-50 transition-transform hover:scale-110 drop-shadow-2xl" aria-label="Chat on WhatsApp">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp" class="w-14 h-14 md:w-16 md:h-16">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp" class="w-14 h-14 md:w-16 md:h-16" loading="lazy" decoding="async">
     </a>
     <script async src="https://www.tiktok.com/embed.js"></script>
 
@@ -1521,7 +1521,7 @@ src="https://www.facebook.com/tr?id=1051864450604425&ev=PageView&noscript=1"
     <div id="reviewLightbox" class="fixed inset-0 z-50 hidden bg-black/95 backdrop-blur-sm flex items-center justify-center p-4" onclick="closeReviewLightbox()">
         <div class="relative max-w-3xl max-h-[90vh] flex items-center justify-center">
             <button class="absolute -top-10 right-0 text-white hover:text-gray-300 text-4xl font-bold z-10" onclick="closeReviewLightbox()">&times;</button>
-            <img id="lightboxImage" src="" class="max-w-full max-h-[85vh] rounded-lg object-contain shadow-2xl" onclick="event.stopPropagation()">
+            <img id="lightboxImage" src="" class="max-w-full max-h-[85vh] rounded-lg object-contain shadow-2xl" onclick="event.stopPropagation()" loading="lazy" decoding="async">
         </div>
     </div>
 </body>

@@ -323,6 +323,36 @@ async def agente_validador_concordancia_gemini(nombre_original_en: str, nombre_e
     es semánticamente el mismo tipo de producto que el original de TikTok.
     Esto previene falsos positivos de búsquedas de texto (ej. "Mini Lint" -> "MINI LINTERNA HD").
     """
+    import unicodedata
+    import difflib
+    import re
+    
+    def normalize_str(s):
+        if not s: return ""
+        s = s.lower().strip()
+        s = "".join(c for c in unicodedata.normalize('NFD', s) if unicodedata.category(c) != 'Mn')
+        s = re.sub(r'[^a-z0-9]', '', s)
+        return s
+        
+    def is_subsequence_match(term, catalog):
+        if not term or not catalog: return False
+        def clean_words(s):
+            s = s.lower()
+            s = "".join(c for c in unicodedata.normalize('NFD', s) if unicodedata.category(c) != 'Mn')
+            words = re.findall(r'[a-z0-9]+', s)
+            stopwords = {'de', 'para', 'con', 'el', 'la', 'un', 'una', 'los', 'las', 'set', 'juego', 'pack', 'pcs', 'del', 'chile', 'guatemala', 'gt'}
+            return {w for w in words if w not in stopwords and len(w) > 2}
+        term_words = clean_words(term)
+        cat_words = clean_words(catalog)
+        return bool(term_words and term_words.issubset(cat_words))
+
+    esp_norm = normalize_str(nombre_espanol)
+    cat_norm = normalize_str(nombre_catalogo_local)
+    similarity = difflib.SequenceMatcher(None, esp_norm, cat_norm).ratio() if esp_norm and cat_norm else 0.0
+    
+    if similarity >= 0.90 or is_subsequence_match(nombre_espanol, nombre_catalogo_local):
+        return True
+        
     cache_key = f"{nombre_original_en}_{nombre_espanol}_{nombre_catalogo_local}"
     cached = get_cached_response("gemini_matching_validation_v2", cache_key)
     if cached is not None:

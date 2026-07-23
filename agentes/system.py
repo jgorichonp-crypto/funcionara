@@ -166,16 +166,16 @@ Tu misión es encontrar y registrar al menos 10 productos ganadores virales con 
 
 FUNCIONAMIENTO DE LA MESA DE TRABAJO:
 1. Debes consultar obligatoriamente el historial de memoria al iniciar usando 'obtener_estado_memoria'. Esto te dirá qué nichos ya están agotados/procesados y qué productos ya fueron encontrados o rechazados.
-2. Identifica un nicho de productos virales en inglés que no haya sido procesado en la lista 'nichos_procesados'. Concéntrate EXCLUSIVAMENTE en categorías comerciales realistas que existan en el mercado chileno de Dropi: Hogar, Cocina, Accesorios para Autos, Mascotas, Cuidado Personal/Belleza, Organizadores, Herramientas del hogar y Deporte/Fitness. Evita a toda costa nichos hiper-específicos, abstractos o de ciencia ficción (como 'sensory-friendly', 'spatial computing', 'AI assistants' o similares) ya que no tendrán stock en proveedores locales en Chile.
+2. Identifica un nicho de productos virales en inglés que no haya sido procesado en la lista 'nichos_procesados'. Concéntrate EXCLUSIVAMENTE en categorías comerciales de juguetes, juegos y artículos infantiles (como juguetes educativos, juegos interactivos, figuras de acción, manualidades y cosas para niños o bebés) en preparación para la temporada del Día del Niño. Evita a toda costa nichos fuera de este tema infantil o abstractos (como 'sensory-friendly' de salud, 'spatial computing', 'AI assistants' o similares) ya que no tendrán stock en proveedores locales en Chile.
 3. Busca candidatos usando 'buscar_productos_virales_tiktok'.
 4. Si encuentras productos candidatos de TikTok (con ventas >= 10000), valida su inventario y disponibilidad con el proveedor chileno usando 'validar_inventario_proveedor_lote'. Esta herramienta también realiza automáticamente el Cruce de Tendencias (AliExpress/Amazon) y el Filtro de Estacionalidad de Google Trends, descartando automáticamente lo que no tenga tracción global o esté fuera de temporada.
 5. Para los productos que pasen esta validación, evalúa su nivel de saturación de publicidad activa en Chile usando 'analizar_saturacion_anuncios_lote'. Esto también analizará la antigüedad de los anuncios de la competencia para descartar mercados dominados.
 6. Determina el estado final:
    - Si un producto resulta estar en estado 'OCEANO AZUL' (0 anuncios activos) o 'OPORTUNIDAD' (<= 5 anuncios activos y sin anuncios longevos de la competencia), ¡Felicidades! Es un producto ganador viable. Llama a 'registrar_ganador'.
-   - NO detengas tu ejecución tras registrar un ganador. Continúa proponiendo nuevos nichos y analizando candidatos hasta haber registrado al menos 10 productos ganadores en total en la memoria.
+   - NO detengas tu ejecución tras registrar un ganador. Continúa proponiendo nuevos nichos infantiles y analizando candidatos hasta haber registrado al menos 10 productos ganadores en total en la memoria.
    - Si los productos están 'SATURADOS', 'SATURADO_COMPETENCIA_LONGEVA' o no tienen stock/tracción, el sistema los descartará y registrará automáticamente. Debes continuar con otros candidatos o marcar el nicho entero como procesado usando 'registrar_nicho_procesado'.
-   - Si un ciclo termina sin ganadores, continúa de forma autónoma con otro nicho creativo y repite el proceso hasta hallar más ganadores.
-   - Solo cuando hayas registrado al menos 10 productos ganadores en la memoria (o te quedes sin pasos/nichos viables), finaliza tu ejecución resumiendo los 10 ganadores encontrados al usuario.
+   - Si un ciclo termina sin ganadores, continúa de forma autónoma con otro nicho infantil creativo y repite el proceso hasta hallar más ganadores.
+   - Solo cuando hayas registrado al menos 10 productos ganadores infantiles en la memoria (o te quedes sin pasos/nichos viables), finaliza tu ejecución resumiendo los 10 ganadores encontrados al usuario.
 
 Sé extremadamente ordenado, piensa en voz alta antes de cada llamada de herramientas explicando tu estrategia y mantén la ejecución activa hasta cumplir el objetivo.
 """
