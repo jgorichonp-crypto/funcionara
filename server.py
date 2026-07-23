@@ -654,5 +654,16 @@ async def create_khipu_payment(order: OrderRequest):
             "payment_url": res.payment_url
         }
     except Exception as e:
-        logger.error(f"Error al crear pago Khipu: {e}")
-        raise HTTPException(status_code=400, detail=str(e))
+        error_msg = str(e)
+        if hasattr(e, 'errors') and e.errors:
+            err_details = [getattr(item, 'message', str(item)) for item in e.errors]
+            error_msg = ", ".join(err_details)
+        
+        if "excede el" in error_msg.lower() or "5000" in error_msg:
+            error_msg = "Khipu está activando el límite para montos superiores a $5.000. Por favor usa 'Paga en Casa' mientras Khipu aprueba el límite."
+
+        logger.error(f"Error al crear pago Khipu: {error_msg}")
+        return JSONResponse(
+            status_code=400,
+            content={"status": "error", "detail": error_msg}
+        )
