@@ -22,6 +22,16 @@ logger = logging.getLogger("DropiServer")
 
 app = FastAPI(title="Dropshipping COD Backend")
 
+from fastapi.middleware.gzip import GZipMiddleware
+app.add_middleware(GZipMiddleware, minimum_size=1000)
+
+@app.middleware("http")
+async def add_cache_control_header(request: Request, call_next):
+    response = await call_next(request)
+    if request.url.path.startswith("/assets/") or request.url.path.endswith((".webp", ".png", ".jpg", ".js", ".css", ".mp4")):
+        response.headers["Cache-Control"] = "public, max-age=31536000, immutable"
+    return response
+
 # Montar carpetas de assets
 if os.path.exists("generated_assets"):
     app.mount("/generated_assets", StaticFiles(directory="generated_assets"), name="generated_assets")
