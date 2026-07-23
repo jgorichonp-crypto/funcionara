@@ -598,7 +598,7 @@ async def create_khipu_payment(order: OrderRequest):
     """Crea una orden en Google Sheets y genera un link de pago con Khipu."""
     try:
         temp_id = f"TEMP-{int(time.time())}"
-        p_name = order.product_name if order.product_name else "Pizarra Mágica LCD 12\""
+        p_name = order.product_name if order.product_name else "Pizarra Mágica LED 12\""
         try:
             if isinstance(order.product_price, (int, float)):
                 p_price = float(order.product_price)
