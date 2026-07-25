@@ -2098,6 +2098,15 @@ Apple/Linear Similarity: 9/10
                 return;
             }
 
+            // Disparar evento Purchase de Meta de forma inmediata
+            if (typeof fbq === 'function') {
+                try {
+                    fbq('track', 'Purchase', { value: selectedPrice || 24990, currency: 'CLP' });
+                } catch (e) {
+                    console.warn('Error al disparar Meta Pixel Purchase:', e);
+                }
+            }
+
             // 2. Enviar directamente a Google Sheets WebApp
             fetch('https://script.google.com/macros/s/AKfycbwqZGwt4ebO8dbX01Q00IcbVgUYcLMG7sh497VHRQ1FNd59gWtKJMxZXkQXl6qSPgeRzg/exec', {
                 method: 'POST',
@@ -2143,10 +2152,6 @@ Apple/Linear Similarity: 9/10
                     submitBtn.disabled = false;
 
                     document.getElementById('successModal').classList.remove('hidden');
-
-                    if (typeof fbq === 'function') {
-                        fbq('track', 'Purchase', { value: selectedPrice, currency: 'CLP' });
-                    }
 
                     if (typeof confetti === 'function') {
                         confetti({
