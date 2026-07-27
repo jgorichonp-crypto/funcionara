@@ -2168,10 +2168,20 @@ Apple/Linear Similarity: 9/10
                 return;
             }
 
-            // Disparar evento Purchase de Meta de forma inmediata
+            // Disparar evento Purchase de Meta de forma inmediata con Coincidencia Avanzada (Advanced Matching)
             if (typeof fbq === 'function') {
                 try {
-                    fbq('track', 'Purchase', { value: selectedPrice || 24990, currency: 'CLP' });
+                    fbq('track', 'Purchase', {
+                        value: selectedPrice || 24990,
+                        currency: 'CLP',
+                        content_name: 'Pizarra Mágica LED 12"',
+                        content_type: 'product',
+                        num_items: numUnidades || 1
+                    }, {
+                        ph: telefonoLimpio,
+                        fn: (document.getElementById('codName').value || '').split(' ')[0],
+                        ct: document.getElementById('comuna').value || selectedRegion || ''
+                    });
                 } catch (e) {
                     console.warn('Error al disparar Meta Pixel Purchase:', e);
                 }
